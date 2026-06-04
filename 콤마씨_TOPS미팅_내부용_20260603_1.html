@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>콤마씨 TOPS 미팅 | 내부용 | 2026.06</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --navy: #0F2044;
+  --blue: #1B4FBE;
+  --blue-light: #2F6FEF;
+  --accent: #00C896;
+  --accent2: #FF6B35;
+  --red: #E8294A;
+  --amber: #F5A623;
+  --gray-50: #F8F9FC;
+  --gray-100: #EEF1F8;
+  --gray-200: #D8DEF0;
+  --gray-400: #8E97B4;
+  --gray-600: #4A5278;
+  --gray-800: #1E2340;
+  --white: #FFFFFF;
+  --slide-w: 1200px;
+  --slide-h: 675px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #0A0E1A;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--gray-800);
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 네비게이션 ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px;
+  background: rgba(10,14,26,0.95);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nav-brand { color: rgba(255,255,255,0.5); font-size: 12px; letter-spacing: 0.08em; font-family: 'DM Mono', monospace; }
+.nav-brand span { color: var(--accent); }
+.nav-controls { display: flex; align-items: center; gap: 12px; }
+.nav-btn {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  color: white; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--blue); border-color: var(--blue); }
+.nav-counter { color: rgba(255,255,255,0.5); font-size: 12px; font-family: 'DM Mono', monospace; min-width: 50px; text-align: center; }
+.nav-dots { display: flex; gap: 6px; align-items: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.2s;
+}
+.nav-dot.active { background: var(--accent); width: 20px; border-radius: 3px; }
+.badge-internal {
+  background: rgba(245,166,35,0.2); color: var(--amber);
+  border: 1px solid rgba(245,166,35,0.4);
+  font-size: 10px; padding: 3px 10px; border-radius: 20px;
+  font-family: 'DM Mono', monospace; letter-spacing: 0.05em;
+}
+
+/* ── 슬라이드 컨테이너 ── */
+.slides-wrap {
+  width: var(--slide-w);
+  height: var(--slide-h);
+  position: relative;
+  margin-top: 52px;
+}
+.slide {
+  position: absolute; inset: 0;
+  width: var(--slide-w); height: var(--slide-h);
+  background: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  transform: translateX(30px);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+.slide.active {
+  opacity: 1; pointer-events: all; transform: translateX(0);
+}
+.slide.prev { transform: translateX(-30px); }
+
+/* ── 공통 슬라이드 요소 ── */
+.slide-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 32px 0;
+}
+.slide-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  font-family: 'DM Mono', monospace;
+  color: var(--blue-light); text-transform: uppercase;
+}
+.slide-num {
+  font-size: 11px; color: var(--gray-400);
+  font-family: 'DM Mono', monospace;
+}
+.slide-title {
+  padding: 10px 32px 0;
+  font-size: 24px; font-weight: 700; color: var(--navy);
+  line-height: 1.3;
+}
+.slide-subtitle {
+  padding: 4px 32px 0;
+  font-size: 13px; color: var(--gray-400); font-weight: 400;
+}
+.slide-body { padding: 16px 32px; flex: 1; }
+.slide-footer {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 8px 32px;
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 10px; color: var(--gray-400);
+  font-family: 'DM Mono', monospace;
+}
+.accent-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue) 0%, var(--accent) 100%);
+  margin: 0 32px;
+}
+
+/* ── KPI 카드 ── */
+.kpi-grid { display: grid; gap: 12px; }
+.kpi-card {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px; padding: 14px 18px;
+  position: relative; overflow: hidden;
+}
+.kpi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.kpi-card.blue::before { background: var(--blue); }
+.kpi-card.green::before { background: var(--accent); }
+.kpi-card.red::before { background: var(--red); }
+.kpi-card.amber::before { background: var(--amber); }
+.kpi-label { font-size: 10px; color: var(--gray-400); font-weight: 500; letter-spacing: 0.05em; margin-bottom: 4px; }
+.kpi-value { font-size: 26px; font-weight: 700; color: var(--navy); line-height: 1; }
+.kpi-sub { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+.kpi-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 4px;
+}
+.kpi-badge.up { background: rgba(0,200,150,0.12); color: var(--accent); }
+.kpi-badge.down-good { background: rgba(0,200,150,0.12); color: var(--accent); }
+.kpi-badge.down-bad { background: rgba(232,41,74,0.1); color: var(--red); }
+
+/* ── 테이블 ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th {
+  background: var(--navy); color: white;
+  padding: 8px 12px; text-align: left;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.03em;
+}
+.data-table th:not(:first-child) { text-align: center; }
+.data-table td { padding: 7px 12px; border-bottom: 1px solid var(--gray-200); }
+.data-table td:not(:first-child) { text-align: center; }
+.data-table tr:nth-child(even) td { background: var(--gray-50); }
+.data-table tr:hover td { background: rgba(27,79,190,0.04); }
+.tag-up { color: var(--accent); font-weight: 700; }
+.tag-down-good { color: var(--accent); font-weight: 700; }
+.tag-down-bad { color: var(--red); font-weight: 700; }
+.tag-warn { color: var(--amber); font-weight: 600; }
+.tag-blue { color: var(--blue); font-weight: 700; }
+
+/* ── 인사이트 박스 ── */
+.insight-box {
+  border-radius: 8px; padding: 10px 14px;
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; line-height: 1.5;
+}
+.insight-box.green { background: rgba(0,200,150,0.08); border: 1px solid rgba(0,200,150,0.25); color: #006644; }
+.insight-box.blue { background: rgba(27,79,190,0.07); border: 1px solid rgba(27,79,190,0.2); color: var(--navy); }
+.insight-box.red { background: rgba(232,41,74,0.07); border: 1px solid rgba(232,41,74,0.2); color: #8B001E; }
+.insight-box.amber { background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.3); color: #7A5000; }
+.insight-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── 퍼널 바 ── */
+.funnel-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.funnel-label { font-size: 11px; color: var(--gray-600); width: 150px; flex-shrink: 0; }
+.funnel-bar-wrap { flex: 1; height: 22px; background: var(--gray-100); border-radius: 4px; overflow: hidden; position: relative; }
+.funnel-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; transition: width 0.8s ease; }
+.funnel-bar span { font-size: 10px; font-weight: 700; color: white; white-space: nowrap; }
+.funnel-val { font-size: 11px; font-weight: 700; width: 50px; text-align: right; color: var(--navy); flex-shrink: 0; }
+
+/* ── 슬라이드별 레이아웃 ── */
+/* SLIDE 1: 커버 */
+#s1 {
+  background: var(--navy);
+  display: flex; flex-direction: column; justify-content: center;
+}
+#s1 .cover-eyebrow {
+  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent); font-family: 'DM Mono', monospace;
+  padding: 0 52px; margin-bottom: 16px;
+}
+#s1 .cover-title {
+  font-size: 52px; font-weight: 900; color: white;
+  line-height: 1.1; padding: 0 52px;
+  letter-spacing: -0.02em;
+}
+#s1 .cover-title span { color: var(--accent); }
+#s1 .cover-sub {
+  font-size: 18px; color: rgba(255,255,255,0.5);
+  padding: 12px 52px 0; font-weight: 300;
+}
+#s1 .cover-meta {
+  margin-top: 40px; padding: 0 52px;
+  display: flex; gap: 32px;
+}
+#s1 .cover-meta-item { }
+#s1 .cover-meta-item .m-label { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+#s1 .cover-meta-item .m-val { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+#s1 .cover-deco {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 340px;
+  background: linear-gradient(135deg, rgba(0,200,150,0.08) 0%, rgba(47,111,239,0.12) 100%);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px; padding: 40px;
+}
+#s1 .deco-num {
+  font-size: 64px; font-weight: 900; color: rgba(255,255,255,0.06);
+  font-family: 'DM Mono', monospace; line-height: 1;
+}
+#s1 .kpi-preview {
+  display: flex; flex-direction: column; gap: 10px; width: 100%;
+}
+#s1 .kpi-preview-item {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; padding: 10px 14px;
+}
+#s1 .kpi-preview-item .p-label { font-size: 9px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'DM Mono', monospace; }
+#s1 .kpi-preview-item .p-val { font-size: 18px; font-weight: 700; color: white; margin-top: 2px; }
+#s1 .kpi-preview-item .p-change { font-size: 10px; color: var(--accent); margin-top: 1px; }
+
+/* SLIDE 2: YoY */
+#s2 .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; height: calc(var(--slide-h) - 140px); padding: 16px 32px; }
+#s2 .left-col { display: flex; flex-direction: column; gap: 10px; }
+#s2 .right-col { display: flex; flex-direction: column; gap: 10px; }
+#s2 .kpi-grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* SLIDE 3: 거래액 추이 */
+#s3 .chart-area { padding: 8px 32px; height: 340px; position: relative; }
+
+/* SLIDE 4: PLP 퍼널 */
+#s4 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 12px 32px; height: calc(var(--slide-h) - 140px); }
+
+/* SLIDE 5: 유입채널 */
+#s5 .two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; padding: 12px 32px; height: calc(var(--slide-h) - 140px); }
+
+/* SLIDE 6: 커튼 분석 */
+#s6 .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 10px 32px; }
+
+/* SLIDE 7: 신상품 */
+#s7 .two-col { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; padding: 12px 32px; height: calc(var(--slide-h) - 140px); }
+
+/* SLIDE 8: 액션 플랜 */
+#s8 { background: var(--navy); }
+#s8 .action-body { padding: 16px 40px; }
+#s8 .action-title { font-size: 22px; font-weight: 700; color: white; margin-bottom: 16px; }
+#s8 .action-table { width: 100%; border-collapse: collapse; }
+#s8 .action-table th { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); padding: 8px 14px; font-size: 10px; text-align: left; letter-spacing: 0.08em; font-family: 'DM Mono', monospace; }
+#s8 .action-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); font-size: 12px; }
+#s8 .action-table tr:last-child td { border-bottom: none; }
+.action-who { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+.action-who.partner { background: rgba(255,107,53,0.2); color: var(--accent2); }
+.action-who.both { background: rgba(0,200,150,0.15); color: var(--accent); }
+.action-when { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.4); }
+
+/* ── 키보드 힌트 ── */
+.kb-hint {
+  position: fixed; bottom: 16px; right: 20px;
+  font-size: 10px; color: rgba(255,255,255,0.2);
+  font-family: 'DM Mono', monospace;
+}
+</style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<div class="nav">
+  <div class="nav-brand">TOPS MEETING · <span>콤마씨</span> · 2026.06.03</div>
+  <div class="nav-controls">
+    <span class="badge-internal">INTERNAL</span>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn" id="prevBtn">←</button>
+    <span class="nav-counter" id="counter">1 / 8</span>
+    <button class="nav-btn" id="nextBtn">→</button>
+  </div>
+</div>
+
+<div class="slides-wrap">
+
+<!-- ══ SLIDE 1: 커버 ══ -->
+<div class="slide active" id="s1">
+  <div class="cover-eyebrow">TOPS MEETING · INTERNAL · brand_id 12436</div>
+  <div class="cover-title">콤마씨<br><span>상반기 브랜드</span><br>진단 리포트</div>
+  <div class="cover-sub">2026년 1월–5월 실적 분석 · 오늘의집 인바운드 MD팀</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="m-label">Analyst</div>
+      <div class="m-val">비니 MD · IB팀</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="m-label">Brand ID</div>
+      <div class="m-val">12436 · shop 5399478</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="m-label">Data Range</div>
+      <div class="m-val">2025.01 – 2026.05</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="m-label">Source</div>
+      <div class="m-val">PRISM / Athena ba_preserved</div>
+    </div>
+  </div>
+  <div class="cover-deco">
+    <div class="deco-num">12436</div>
+    <div class="kpi-preview">
+      <div class="kpi-preview-item">
+        <div class="p-label">순거래액 YoY</div>
+        <div class="p-val">+196%</div>
+        <div class="p-change">▲ 222만 → 657만원</div>
+      </div>
+      <div class="kpi-preview-item">
+        <div class="p-label">취소율 YoY</div>
+        <div class="p-val">-3.8%p</div>
+        <div class="p-change">▼ 18.5% → 14.7% (개선)</div>
+      </div>
+      <div class="kpi-preview-item">
+        <div class="p-label">주문건수 YoY</div>
+        <div class="p-val">+168%</div>
+        <div class="p-change">▲ 41건 → 110건</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2: YoY 핵심 지표 ══ -->
+<div class="slide" id="s2">
+  <div class="slide-header">
+    <span class="slide-tag">01 · 브랜드 진단</span>
+    <span class="slide-num">2 / 8</span>
+  </div>
+  <div class="slide-title">26년 상반기 핵심 지표 — YoY 비교</div>
+  <div class="slide-subtitle">25년 1–5월 vs 26년 1–5월 · comm_product_perform 기준</div>
+  <div class="accent-bar"></div>
+  <div class="main-grid">
+    <div class="left-col">
+      <div class="kpi-grid-2x2">
+        <div class="kpi-card blue">
+          <div class="kpi-label">순거래액 (26H1)</div>
+          <div class="kpi-value">657만</div>
+          <div class="kpi-sub">25H1: 222만원</div>
+          <div class="kpi-badge up">▲ +196% YoY</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">주문건수 (26H1)</div>
+          <div class="kpi-value">110건</div>
+          <div class="kpi-sub">25H1: 41건</div>
+          <div class="kpi-badge up">▲ +168% YoY</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">취소율 (26H1)</div>
+          <div class="kpi-value">14.7%</div>
+          <div class="kpi-sub">25H1: 18.5%</div>
+          <div class="kpi-badge down-good">▼ -3.8%p 개선</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">PDP 조회수 (26H1)</div>
+          <div class="kpi-value">36,130</div>
+          <div class="kpi-sub">25H1: 24,502건</div>
+          <div class="kpi-badge up">▲ +47% YoY</div>
+        </div>
+      </div>
+      <div class="insight-box green">
+        <span class="insight-icon">✅</span>
+        <div><strong>거래액 3배 성장 + 취소율 동시 개선.</strong> 외형·체질 모두 향상되는 이상적 패턴. 26년 Organic 중심 자연 성장 궤도 진입.</div>
+      </div>
+    </div>
+    <div class="right-col">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>지표</th><th>25H1</th><th>26H1</th><th>변동</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>순거래액</td><td>2,220,250원</td><td>6,574,450원</td><td class="tag-up">▲+196%</td></tr>
+          <tr><td>결제거래액</td><td>5,414,000원</td><td>13,855,500원</td><td class="tag-up">▲+156%</td></tr>
+          <tr><td>취소액</td><td>1,003,200원</td><td>2,043,250원</td><td class="tag-warn">▲+104%</td></tr>
+          <tr><td>취소율</td><td>18.5%</td><td>14.7%</td><td class="tag-down-good">▼-3.8%p</td></tr>
+          <tr><td>주문건수</td><td>41건</td><td>110건</td><td class="tag-up">▲+168%</td></tr>
+          <tr><td>PDP 조회</td><td>24,502건</td><td>36,130건</td><td class="tag-up">▲+47%</td></tr>
+          <tr><td>노출수</td><td>2,088,741</td><td>1,783,118</td><td class="tag-down-bad">▼-15%</td></tr>
+        </tbody>
+      </table>
+      <div class="insight-box amber">
+        <span class="insight-icon">⚠️</span>
+        <div>노출수는 -15% 감소했으나 PDP 조회 +47% — 노출 효율(imp→PV) 대폭 개선. 노출 확대 시 GMV 추가 레버리지 가능.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>ba_preserved.comm_product_perform · period_base='month' · shop_id=5399478</span>
+    <span>INTERNAL · 2026-06-03</span>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3: 거래액 추이 ══ -->
+<div class="slide" id="s3">
+  <div class="slide-header">
+    <span class="slide-tag">02 · 거래액 추이</span>
+    <span class="slide-num">3 / 8</span>
+  </div>
+  <div class="slide-title">월별 순거래액 추이 — 17개월 (2025.01 – 2026.05)</div>
+  <div class="slide-subtitle">commerce_gross_profit · brand_id=12436 · 단위: 만원</div>
+  <div class="accent-bar"></div>
+  <div class="chart-area"><canvas id="gmvChart"></canvas></div>
+  <div style="padding: 0 32px; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: -4px;">
+    <div class="insight-box blue">
+      <span class="insight-icon">📈</span>
+      <div><strong>26년 3월부터 뚜렷한 우상향.</strong> 25년은 월 50~210만원 변동폭 큰 패턴 → 26년 안정적 성장 궤도.</div>
+    </div>
+    <div class="insight-box amber">
+      <span class="insight-icon">⚠️</span>
+      <div><strong>25.09 저점 90만원.</strong> 취소율 51% 동반 — 소량거래(6건) 단건 취소로 비율 왜곡. 구조 문제 아님.</div>
+    </div>
+    <div class="insight-box green">
+      <span class="insight-icon">🎯</span>
+      <div><strong>26.04 최고점 227만원.</strong> 이사철+리뷰 누적 효과. 5월 78만원은 월중 데이터로 실제 더 높을 가능성.</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>ba_preserved.commerce_gross_profit · yyyymm 파티션 · brand_id=12436 product_id IN 필터</span>
+    <span>INTERNAL · 2026-06-03</span>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4: PLP 퍼널 ══ -->
+<div class="slide" id="s4">
+  <div class="slide-header">
+    <span class="slide-tag">03 · PLP 퍼널 분석</span>
+    <span class="slide-num">4 / 8</span>
+  </div>
+  <div class="slide-title">지면별 노출 → 구매 전환 퍼널 (25.12 – 26.05)</div>
+  <div class="slide-subtitle">comm_product_perform_att · page_d1 기준 집계 · GMV 내림차순</div>
+  <div class="accent-bar"></div>
+  <div class="two-col" id="s4">
+    <div>
+      <table class="data-table" style="font-size:11px;">
+        <thead>
+          <tr><th>지면</th><th>노출</th><th>PDP조회</th><th>구매</th><th>GMV</th><th>CVR</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>검색 (SRP·매장)</strong></td><td>312,485</td><td>3,241</td><td>9</td><td class="tag-blue">126만</td><td>0.28%</td></tr>
+          <tr><td><strong>브랜드페이지</strong></td><td>198,302</td><td>4,102</td><td>12</td><td class="tag-blue">106만</td><td>0.29%</td></tr>
+          <tr><td>스크랩 (SCRAP)</td><td>42,180</td><td>1,580</td><td>8</td><td>81만</td><td>0.51%</td></tr>
+          <tr><td>장바구니 (CART)</td><td>8,240</td><td>1,066</td><td>8</td><td>77만</td><td class="tag-up"><strong>0.75%</strong></td></tr>
+          <tr><td>오늘의딜</td><td>95,400</td><td>1,820</td><td>5</td><td>49만</td><td>0.27%</td></tr>
+          <tr><td>통합검색</td><td>47,200</td><td>980</td><td>5</td><td>47만</td><td>0.51%</td></tr>
+          <tr><td>기획전</td><td class="tag-down-bad"><strong>885,600</strong></td><td>3,140</td><td>1</td><td class="tag-warn">18만</td><td class="tag-down-bad">0.04%</td></tr>
+          <tr><td>카테고리</td><td>58,300</td><td>920</td><td>3</td><td>24만</td><td>0.33%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:4px;">PDP조회→구매 전환율 (CVR)</div>
+      <div id="funnelBars"></div>
+      <div class="insight-box red">
+        <span class="insight-icon">🚨</span>
+        <div><strong>기획전 전환율 0.04% — 노출 최대(88.6만)인데 구매 1건.</strong> 기획전 트래픽 품질 낮음. 스크랩·장바구니 CVR이 10~18배 효율적.</div>
+      </div>
+      <div class="insight-box blue">
+        <span class="insight-icon">💡</span>
+        <div><strong>장바구니 CVR 0.75% 1위.</strong> 고단가 침구·커튼 특성상 고민 후 구매. 브랜드 위시리스트 활성화 전략 유효.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>ba_preserved.comm_product_perform_att · yyyymm IN ('202512'~'202605') · product_id IN 필터</span>
+    <span>INTERNAL · 2026-06-03</span>
+  </div>
+</div>
+
+<!-- ══ SLIDE 5: 유입채널 ══ -->
+<div class="slide" id="s5">
+  <div class="slide-header">
+    <span class="slide-tag">04 · 유입채널 분석</span>
+    <span class="slide-num">5 / 8</span>
+  </div>
+  <div class="slide-title">Organic vs Paid 채널 구성 (26.03 – 26.05)</div>
+  <div class="slide-subtitle">comm_product_perform_att · organic / paid / nonpaid 분리 집계</div>
+  <div class="accent-bar"></div>
+  <div class="two-col" id="s5">
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <table class="data-table">
+        <thead>
+          <tr><th>채널</th><th>노출</th><th>PDP조회</th><th>구매</th><th>GMV</th><th>GMV비중</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Organic</strong></td><td>1,165,310</td><td>16,121</td><td>27</td><td class="tag-blue">389만</td><td class="tag-blue"><strong>80%</strong></td></tr>
+          <tr><td><strong>Paid</strong></td><td>157,280</td><td>1,855</td><td>6</td><td>80만</td><td>16%</td></tr>
+          <tr><td><strong>Nonpaid</strong></td><td>113,836</td><td>926</td><td>1</td><td>19만</td><td>4%</td></tr>
+          <tr style="background:var(--gray-50);font-weight:600;">
+            <td><strong>합계</strong></td><td>1,436,426</td><td>18,902</td><td>34</td><td class="tag-blue"><strong>488만</strong></td><td>100%</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div class="kpi-card blue">
+          <div class="kpi-label">Organic CVR</div>
+          <div class="kpi-value" style="font-size:20px;">0.17%</div>
+          <div class="kpi-sub">PDP→구매</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Paid CVR</div>
+          <div class="kpi-value" style="font-size:20px;">0.32%</div>
+          <div class="kpi-sub">Organic 대비 1.9x</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Paid GMV 비중</div>
+          <div class="kpi-value" style="font-size:20px;">16%</div>
+          <div class="kpi-sub">광고 확대 여지↑</div>
+        </div>
+      </div>
+      <div class="insight-box amber">
+        <span class="insight-icon">💡</span>
+        <div><strong>Paid CVR이 Organic의 1.9배.</strong> 광고 유입 고객의 구매 의도가 더 높음. 현재 Paid 비중 16%로 낮아 — 광고 투자 확대 시 ROI 높을 것으로 예상.</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="font-size:12px;font-weight:600;color:var(--navy);">GMV 채널 구성</div>
+      <div style="width:200px;height:200px;"><canvas id="channelPie"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:6px;width:100%;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
+          <div style="width:10px;height:10px;border-radius:2px;background:#1B4FBE;flex-shrink:0;"></div>
+          <span>Organic 80% — 검색·브랜드페이지 자연유입</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
+          <div style="width:10px;height:10px;border-radius:2px;background:#F5A623;flex-shrink:0;"></div>
+          <span>Paid 16% — 광고 경유 (CVR 더 높음)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
+          <div style="width:10px;height:10px;border-radius:2px;background:#8E97B4;flex-shrink:0;"></div>
+          <span>Nonpaid 4%</span>
+        </div>
+      </div>
+      <div class="insight-box green">
+        <span class="insight-icon">🎯</span>
+        <div>Organic 의존도 80% = 브랜드 자생력 확인. 광고 투자 레버리지 가능 구조.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>ba_preserved.comm_product_perform_att · yyyymm IN ('202603','202604','202605') · product_id IN 필터</span>
+    <span>INTERNAL · 2026-06-03</span>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6: 커튼 분석 ══ -->
+<div class="slide" id="s6">
+  <div class="slide-header">
+    <span class="slide-tag">05 · 커튼 카테고리 심층 분석</span>
+    <span class="slide-num">6 / 8</span>
+  </div>
+  <div class="slide-title">커튼/블라인드 급성장 원인 분해</div>
+  <div class="slide-subtitle">1개 SKU [1136856] 주도 · 리뷰 누적 → 검색 자연 상승 구조</div>
+  <div class="accent-bar"></div>
+  <div class="three-col">
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:2px;">📦 SKU별 GMV 기여 (26년 1~5월)</div>
+      <div style="height:170px;"><canvas id="curtainSkuChart"></canvas></div>
+      <div class="insight-box red" style="font-size:11px;">
+        <span class="insight-icon">⚠️</span>
+        <div>[1136856] 단일 SKU가 커튼 GMV <strong>92%</strong> 차지. 현재 활성 SKU 2종뿐 (나머지 3종 판매정지).</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:2px;">🔍 검색 노출 vs PDP 조회 추이</div>
+      <div style="height:170px;"><canvas id="curtainSrpChart"></canvas></div>
+      <div class="insight-box green" style="font-size:11px;">
+        <span class="insight-icon">✅</span>
+        <div>25.09 노출 2천건 → 26.05 5,364건 <strong>+160%</strong>. 리뷰 11건 4.9★ → 검색 랭킹 자연 상승.</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:2px;">🏷️ [1136856] 상품 상세</div>
+      <table class="data-table" style="font-size:10px;">
+        <tbody>
+          <tr><td style="color:var(--gray-400);">상품명</td><td>프리미엄리넨 투톤 한폭커튼</td></tr>
+          <tr><td style="color:var(--gray-400);">판매가</td><td><strong>112,500원</strong></td></tr>
+          <tr><td style="color:var(--gray-400);">등록일</td><td>2021년 12월</td></tr>
+          <tr><td style="color:var(--gray-400);">리뷰</td><td class="tag-up"><strong>11건 · ★4.9</strong></td></tr>
+          <tr><td style="color:var(--gray-400);">카테고리</td><td>커튼/블라인드</td></tr>
+          <tr><td style="color:var(--gray-400);">26H1 GMV</td><td class="tag-blue"><strong>935,000원</strong></td></tr>
+          <tr><td style="color:var(--gray-400);">26.05 노출</td><td>5,364건</td></tr>
+          <tr><td style="color:var(--gray-400);">26.05 PDP</td><td>516건 (+65% YoY)</td></tr>
+        </tbody>
+      </table>
+      <div class="insight-box amber" style="font-size:11px;">
+        <span class="insight-icon">💡</span>
+        <div>26.05 첫 장바구니→구매 전환 발생. 브랜드 인지도 상승 신호. 컬러/사이즈 확장 시 레버리지 大.</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 32px;">
+    <div class="insight-box red" style="font-size:11px;">
+      <span class="insight-icon">🚨</span>
+      <div><strong>핵심 리스크:</strong> 성장이 21년 등록된 구형 SKU 1개에 전적으로 의존. 신규 커튼 SKU 없으면 하반기 이 카테고리 성장 둔화 불가피. 파트너에게 커튼 라인 확대 요청 필요.</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>comm_product_perform_att + commerce_gross_profit + prism_d_product_info_latest</span>
+    <span>INTERNAL · 2026-06-03</span>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7: 신상품 ══ -->
+<div class="slide" id="s7">
+  <div class="slide-header">
+    <span class="slide-tag">06 · 신상품 & 가격대 진단</span>
+    <span class="slide-num">7 / 8</span>
+  </div>
+  <div class="slide-title">신상품 등록 공백 & 가격대 분포 진단</div>
+  <div class="slide-subtitle">comm_product_perform (prd_cnt_new) + prism_d_product_info_latest · 판매중 기준</div>
+  <div class="accent-bar"></div>
+  <div class="two-col" id="s7">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:12px;font-weight:600;color:var(--navy);">월별 신상품 등록 추이</div>
+      <div style="height:200px;"><canvas id="newPrdChart"></canvas></div>
+      <div class="insight-box red">
+        <span class="insight-icon">🚨</span>
+        <div><strong>26년 1~5월 신상품 6개에 그침</strong> (25.12 9개 이후 급감). 현재 GMV 성장은 기존 SKU 소진 구조 — 신상품 없으면 하반기 한계 도달.</div>
+      </div>
+      <table class="data-table" style="font-size:11px;">
+        <thead><tr><th>기간</th><th>신상품</th><th>판매중</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>25년 6~11월</td><td>14개</td><td>~3,100개</td><td>분기별 소량</td></tr>
+          <tr><td>25년 12월</td><td class="tag-up">9개</td><td>3,096개</td><td>연중 최다</td></tr>
+          <tr><td>26년 1~2월</td><td class="tag-down-bad">1개</td><td>~3,000개</td><td>공백</td></tr>
+          <tr><td>26년 3~4월</td><td class="tag-down-bad">3개</td><td>~3,200개</td><td>공백</td></tr>
+          <tr><td>26년 5월</td><td>2개</td><td>2,990개</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:12px;font-weight:600;color:var(--navy);">판매중 상품 가격대 분포</div>
+      <div style="height:200px;"><canvas id="priceChart"></canvas></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="insight-box blue" style="font-size:11px;">
+          <span class="insight-icon">📊</span>
+          <div>10~20만원대 침구 <strong>47개</strong>로 최다. 메인 가격 포지션 명확.</div>
+        </div>
+        <div class="insight-box amber" style="font-size:11px;">
+          <span class="insight-icon">⚠️</span>
+          <div>20만원+ 10개, 리뷰 평균 2건. 전환 기반 부족 — 리뷰 유도 필요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>ba_preserved.comm_product_perform (prd_cnt_new) + prism_d_product_info_latest · status_v2_kr='판매중'</span>
+    <span>INTERNAL · 2026-06-03</span>
+  </div>
+</div>
+
+<!-- ══ SLIDE 8: 액션 플랜 ══ -->
+<div class="slide" id="s8">
+  <div class="slide-header" style="padding-top:18px;">
+    <span class="slide-tag" style="color:var(--accent);">07 · 액션 플랜</span>
+    <span class="slide-num" style="color:rgba(255,255,255,0.3);">8 / 8</span>
+  </div>
+  <div class="slide-title" style="color:white;padding:10px 40px 0;">미팅 합의 액션 플랜</div>
+  <div style="height:2px;background:linear-gradient(90deg,var(--blue-light),var(--accent));margin:8px 40px;"></div>
+  <div class="action-body">
+    <table class="action-table">
+      <thead>
+        <tr><th>#</th><th>액션 항목</th><th>담당</th><th>목표 시점</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;">01</td>
+          <td>커튼 신상품 론칭 일정 확인 (컬러/사이즈 추가 또는 신규 SKU)<br><span style="font-size:10px;color:rgba(255,255,255,0.3);">리뷰 11건 4.9★로 수요 검증됨 — 최우선 신상품 후보</span></td>
+          <td><span class="action-who partner">파트너</span></td>
+          <td class="action-when">2026.07말</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;">02</td>
+          <td>냉감 침구 신상품 소싱 가능 여부 공유<br><span style="font-size:10px;color:rgba(255,255,255,0.3);">6월 셋째 주 냉감 이불 수요 피크 — 타이밍 중요</span></td>
+          <td><span class="action-who partner">파트너</span></td>
+          <td class="action-when">2026.06말</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;">03</td>
+          <td>판매정지 커튼 SKU 재입점 가능 여부 확인<br><span style="font-size:10px;color:rgba(255,255,255,0.3);">실키코튼·스트라이프 커튼 3종 현재 판매정지 상태</span></td>
+          <td><span class="action-who partner">파트너</span></td>
+          <td class="action-when">2026.06말</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;">04</td>
+          <td>취소 상위 3건 사유 공유 (사이즈·색상 오인 등)<br><span style="font-size:10px;color:rgba(255,255,255,0.3);">상세페이지 개선 또는 안내 문구 조정에 활용</span></td>
+          <td><span class="action-who partner">파트너</span></td>
+          <td class="action-when">차주 내</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;">05</td>
+          <td>네이버 쇼핑 광고 집행 논의 — Paid CVR 0.32% (Organic 1.9배)<br><span style="font-size:10px;color:rgba(255,255,255,0.3);">현재 Paid 비중 16% → 확대 시 GMV 레버리지 가능</span></td>
+          <td><span class="action-who both">비니 + 파트너</span></td>
+          <td class="action-when">2026.07내</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;">06</td>
+          <td>하반기 기획전 참여 상품 재검토 — 기획전 CVR 0.04% 최하위<br><span style="font-size:10px;color:rgba(255,255,255,0.3);">스크랩/장바구니 유도 콘텐츠 전환으로 효율화</span></td>
+          <td><span class="action-who both">비니 + 파트너</span></td>
+          <td class="action-when">2026.07내</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:14px;padding:10px 14px;background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);border-radius:8px;font-size:12px;color:var(--accent);">
+      ✅ <strong>핵심 메시지:</strong> 거래액 +196%·취소율 개선으로 성장 궤도 진입. 신상품 공급이 하반기 성장의 유일한 병목. 커튼 라인 확대가 최우선.
+    </div>
+  </div>
+  <div class="slide-footer" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
+    <span style="color:rgba(255,255,255,0.2);">오늘의집 인바운드 MD팀 내부용 · 외부 배포 금지</span>
+    <span style="color:rgba(255,255,255,0.2);">INTERNAL · 2026-06-03 · PRISM/Athena</span>
+  </div>
+</div>
+
+</div><!-- /slides-wrap -->
+
+<div class="kb-hint">← → 키 또는 버튼으로 이동</div>
+
+<script>
+// ── 슬라이드 제어 ─────────────────────────────────────
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let cur = 0;
+
+const dotsEl = document.getElementById('dots');
+const dots = [];
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+  dots.push(d);
+});
+
+function goTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('prev');
+  setTimeout(() => slides[cur === n ? cur : cur].classList.remove('prev'), 400);
+  dots[cur].classList.remove('active');
+  cur = n;
+  slides[cur].classList.add('active');
+  dots[cur].classList.add('active');
+  document.getElementById('counter').textContent = `${cur + 1} / ${total}`;
+  // 이전 슬라이드 prev 정리
+  slides.forEach((s, i) => { if (i !== cur) s.classList.remove('prev'); });
+}
+
+document.getElementById('prevBtn').onclick = () => goTo(cur - 1);
+document.getElementById('nextBtn').onclick = () => goTo(cur + 1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(cur + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(cur - 1);
+});
+
+// ── Chart.js 설정 ─────────────────────────────────────
+Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+
+const BLUE = '#1B4FBE', ACCENT = '#00C896', RED = '#E8294A', AMBER = '#F5A623', GRAY = '#D8DEF0';
+
+// SLIDE 3: GMV 추이
+new Chart(document.getElementById('gmvChart'), {
+  type: 'bar',
+  data: {
+    labels: ['25.01','25.02','25.03','25.04','25.05','25.06','25.07','25.08','25.09','25.10','25.11','25.12','26.01','26.02','26.03','26.04','26.05'],
+    datasets: [
+      {
+        label: '순거래액(만원)',
+        data: [48.7,115.7,127.1,61.3,77.3,145.1,102.9,128.6,46.9,169.6,194.3,103.7,101.7,184.3,324.5,336.3,234.5],
+        backgroundColor: (ctx) => ctx.dataIndex >= 12 ? BLUE : 'rgba(27,79,190,0.25)',
+        borderColor: (ctx) => ctx.dataIndex >= 12 ? '#0F2044' : BLUE,
+        borderWidth: 0, borderRadius: 4,
+        yAxisID: 'y'
+      },
+      {
+        label: '취소율(%)',
+        data: [null,null,null,null,null,null,null,null,50.7,null,null,null,19.1,11.7,11.5,19.2,12.6],
+        type: 'line',
+        borderColor: RED,
+        backgroundColor: 'rgba(232,41,74,0.06)',
+        pointBackgroundColor: RED,
+        pointRadius: (ctx) => ctx.raw ? 5 : 0,
+        tension: 0.3, fill: false,
+        yAxisID: 'y1'
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } },
+      tooltip: { callbacks: {
+        label: ctx => ctx.datasetIndex === 0 ? `순거래액: ${ctx.raw}만원` : `취소율: ${ctx.raw}%`
+      }}
+    },
+    scales: {
+      x: { ticks: { font: { size: 10 }, color: '#8E97B4' }, grid: { color: '#EEF1F8' } },
+      y: { ticks: { font: { size: 10 }, color: '#8E97B4', callback: v => v+'만' }, grid: { color: '#EEF1F8' }, position: 'left' },
+      y1: { ticks: { font: { size: 10 }, color: RED, callback: v => v+'%' }, grid: { display: false }, position: 'right', min: 0, max: 70 }
+    }
+  }
+});
+
+// SLIDE 4: 퍼널 바
+const funnelData = [
+  { label: '장바구니 (CART)', cvr: 0.75, color: ACCENT },
+  { label: '스크랩 (SCRAP)', cvr: 0.51, color: '#2F6FEF' },
+  { label: '통합검색 (SRP통합)', cvr: 0.49, color: '#2F6FEF' },
+  { label: '브랜드페이지', cvr: 0.30, color: BLUE },
+  { label: '카테고리', cvr: 0.33, color: BLUE },
+  { label: '오늘의딜', cvr: 0.21, color: AMBER },
+  { label: '검색(SRP·매장)', cvr: 0.28, color: BLUE },
+  { label: '기획전', cvr: 0.04, color: RED },
+];
+const funnelEl = document.getElementById('funnelBars');
+const maxCvr = 0.75;
+funnelData.forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'funnel-row';
+  row.innerHTML = `
+    <div class="funnel-label">${d.label}</div>
+    <div class="funnel-bar-wrap">
+      <div class="funnel-bar" style="width:${(d.cvr/maxCvr*100).toFixed(0)}%;background:${d.color};">
+        <span>${d.cvr.toFixed(2)}%</span>
+      </div>
+    </div>
+    <div class="funnel-val" style="color:${d.color}">${d.cvr.toFixed(2)}%</div>
+  `;
+  funnelEl.appendChild(row);
+});
+
+// SLIDE 5: 채널 파이
+new Chart(document.getElementById('channelPie'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Organic', 'Paid', 'Nonpaid'],
+    datasets: [{ data: [80, 16, 4], backgroundColor: [BLUE, AMBER, GRAY], borderWidth: 0, hoverOffset: 4 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}%` } } },
+    cutout: '60%'
+  }
+});
+
+// SLIDE 6: 커튼 SKU 파이
+new Chart(document.getElementById('curtainSkuChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['[1136856] 프리미엄리넨 커튼', '[1287765] 소프트리넨 커튼'],
+    datasets: [{ data: [92, 8], backgroundColor: [BLUE, GRAY], borderWidth: 0, hoverOffset: 4 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10 } },
+      tooltip: { callbacks: { label: ctx => `${ctx.raw}%` } }
+    },
+    cutout: '55%'
+  }
+});
+
+// SLIDE 6: 커튼 SRP 추이
+new Chart(document.getElementById('curtainSrpChart'), {
+  type: 'line',
+  data: {
+    labels: ['25.05','25.09','25.12','26.03','26.05'],
+    datasets: [
+      { label: '검색 노출', data: [344, 2049, 4819, 7200, 5364], borderColor: BLUE, backgroundColor: 'rgba(27,79,190,0.07)', pointRadius: 5, tension: 0.3, fill: true, yAxisID: 'y' },
+      { label: 'PDP 조회', data: [8, 90, 161, 310, 516], borderColor: ACCENT, pointRadius: 5, tension: 0.3, borderDash: [4,3], yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, labels: { font: { size: 10 }, boxWidth: 10 } } },
+    scales: {
+      x: { ticks: { font: { size: 10 }, color: '#8E97B4' }, grid: { color: '#EEF1F8' } },
+      y: { ticks: { font: { size: 10 }, color: BLUE }, grid: { color: '#EEF1F8' }, position: 'left', title: { display: true, text: '노출', color: BLUE, font: { size: 9 } } },
+      y1: { ticks: { font: { size: 10 }, color: ACCENT }, grid: { display: false }, position: 'right', title: { display: true, text: 'PDP조회', color: ACCENT, font: { size: 9 } } }
+    }
+  }
+});
+
+// SLIDE 7: 신상품 등록
+new Chart(document.getElementById('newPrdChart'), {
+  type: 'bar',
+  data: {
+    labels: ['25.06','25.07','25.08','25.09','25.10','25.11','25.12','26.01','26.02','26.03','26.04','26.05'],
+    datasets: [{
+      label: '신상품 등록',
+      data: [4,0,2,3,5,0,9,1,0,0,3,2],
+      backgroundColor: (ctx) => {
+        const v = ctx.raw;
+        return ctx.dataIndex === 6 ? ACCENT : v === 0 ? RED + '44' : 'rgba(27,79,190,0.5)';
+      },
+      borderWidth: 0, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => `신상품: ${ctx.raw}개` } }
+    },
+    scales: {
+      x: { ticks: { font: { size: 10 }, color: '#8E97B4' }, grid: { color: '#EEF1F8' } },
+      y: { ticks: { font: { size: 10 }, color: '#8E97B4', stepSize: 3 }, grid: { color: '#EEF1F8' }, max: 12 }
+    }
+  }
+});
+
+// SLIDE 7: 가격대
+new Chart(document.getElementById('priceChart'), {
+  type: 'bar',
+  data: {
+    labels: ['1~3만','3~5만','5~10만','10~20만','20만+'],
+    datasets: [{
+      label: '상품수',
+      data: [16,12,15,47,10],
+      backgroundColor: ['rgba(27,79,190,0.3)','rgba(27,79,190,0.4)','rgba(27,79,190,0.55)','#1B4FBE','rgba(27,79,190,0.7)'],
+      borderWidth: 0, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.raw}개` } } },
+    scales: {
+      x: { ticks: { font: { size: 10 }, color: '#8E97B4' }, grid: { color: '#EEF1F8' } },
+      y: { ticks: { font: { size: 10 }, color: '#8E97B4' }, grid: { color: '#EEF1F8' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
