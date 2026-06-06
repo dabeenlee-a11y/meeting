@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>도르모르 TOPS 미팅 | 2026.06.04</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#0F2044;--blue:#1B4FBE;--acc:#00C896;--red:#E8294A;--amb:#F5A623;--pur:#7F77DD;}
+body{background:#0A0E1A;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#1E2340;display:flex;flex-direction:column;align-items:center;}
+.nav{position:fixed;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(10,14,26,.97);border-bottom:1px solid rgba(255,255,255,.08);z-index:100;}
+.nav-brand{color:rgba(255,255,255,.5);font-size:12px;}.nav-brand b{color:#fff;}
+.badge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(0,200,150,.18);color:#00C896;border:1px solid rgba(0,200,150,.3);margin-left:6px;font-family:monospace;}
+.nav-r{display:flex;align-items:center;gap:8px;}
+.nav-dots{display:flex;gap:5px;align-items:center;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:all .2s;}
+.dot.on{background:#00C896;width:16px;border-radius:3px;}
+.nbtn{width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.nbtn:hover{background:#1B4FBE;}
+.nctr{font-size:11px;color:rgba(255,255,255,.3);min-width:38px;text-align:center;}
+.dl{font-size:11px;padding:5px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;}
+.dl:hover{background:#00C896;color:#0F2044;border-color:#00C896;}
+.wrap{width:1140px;max-width:98vw;margin-top:58px;}
+.slide{display:none;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,.5);flex-direction:column;min-height:620px;}
+.slide.on{display:flex;}
+.lbar{position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#1B4FBE,#00C896);}
+.shd{padding:20px 28px 0;flex-shrink:0;}
+.stag{font-size:9px;font-weight:700;letter-spacing:.12em;color:#1B4FBE;text-transform:uppercase;}
+.st{font-size:20px;font-weight:700;color:#0F2044;margin-top:4px;line-height:1.25;}
+.st em{color:#1B4FBE;font-style:normal;}
+.ssub{font-size:11px;color:#8E97B4;margin-top:3px;}
+.srule{height:2px;background:linear-gradient(90deg,#1B4FBE,#00C896);margin:10px 28px;flex-shrink:0;}
+.sbd{padding:0 28px 14px;overflow-y:auto;flex:1;}
+.sft{padding:7px 28px;background:#F8F9FC;border-top:1px solid #D8DEF0;font-size:9px;color:#8E97B4;display:flex;justify-content:space-between;flex-shrink:0;}
+.kpis{display:grid;gap:9px;margin-bottom:12px;}
+.kpi{background:#F8F9FC;border:1px solid #D8DEF0;border-radius:8px;padding:11px 14px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi.b::before{background:#1B4FBE;}.kpi.g::before{background:#00C896;}.kpi.r::before{background:#E8294A;}.kpi.a::before{background:#F5A623;}
+.kl{font-size:10px;color:#8E97B4;font-weight:500;margin-bottom:2px;}
+.kv{font-size:20px;font-weight:700;color:#0F2044;line-height:1;}
+.ks{font-size:10px;color:#8E97B4;margin-top:2px;}
+.kb{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;}
+.kb.up{background:rgba(0,200,150,.12);color:#007A5A;}.kb.dn{background:rgba(232,41,74,.1);color:#B0001E;}.kb.wa{background:rgba(245,166,35,.15);color:#8A5500;}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.tbl th{background:#0F2044;color:#fff;padding:7px 10px;text-align:left;font-size:10px;font-weight:600;}
+.tbl th:not(:first-child){text-align:center;}
+.tbl td{padding:6px 10px;border-bottom:1px solid #D8DEF0;}
+.tbl td:not(:first-child){text-align:center;}
+.tbl tr:hover td{background:#F8F9FC;}
+.cu{color:#00C896;font-weight:700;}.cr{color:#E8294A;font-weight:700;}.ca{color:#F5A623;font-weight:600;}.cb{color:#1B4FBE;font-weight:700;}
+.ib{border-radius:8px;padding:9px 12px;font-size:11px;line-height:1.55;display:flex;gap:7px;align-items:flex-start;}
+.ib.g{background:rgba(0,200,150,.08);border:1px solid rgba(0,200,150,.2);color:#005A40;}
+.ib.b{background:rgba(27,79,190,.07);border:1px solid rgba(27,79,190,.18);color:#1A2F7A;}
+.ib.r{background:rgba(232,41,74,.07);border:1px solid rgba(232,41,74,.18);color:#8B001E;}
+.ib.a{background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.25);color:#7A5000;}
+.fb{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.fb-l{font-size:10px;color:#8E97B4;width:110px;flex-shrink:0;}
+.fb-w{flex:1;height:18px;background:#EEF1F8;border-radius:3px;overflow:hidden;}
+.fb-b{height:100%;display:flex;align-items:center;padding:0 7px;border-radius:3px;}
+.fb-b span{font-size:9px;font-weight:700;color:#fff;white-space:nowrap;}
+.fb-v{font-size:10px;font-weight:700;width:44px;text-align:right;}
+.acg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.ac{background:#F8F9FC;border:1px solid #D8DEF0;border-radius:8px;padding:11px 13px;display:flex;flex-direction:column;gap:4px;}
+.ac.hi{background:#0F2044;border-color:#0F2044;}
+.ac-n{font-size:9px;font-weight:700;color:#1B4FBE;}.ac.hi .ac-n{color:rgba(255,255,255,.4);}
+.ac-t{font-size:11px;font-weight:700;color:#0F2044;line-height:1.3;}.ac.hi .ac-t{color:#fff;}
+.ac-d{font-size:10px;color:#8E97B4;line-height:1.45;}.ac.hi .ac-d{color:rgba(255,255,255,.55);}
+.aw{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;align-self:flex-start;}
+.aw-p{background:rgba(245,166,35,.15);color:#8A5500;}.aw-b{background:rgba(27,79,190,.1);color:#1B4FBE;}.aw-a{background:rgba(0,200,150,.1);color:#007A5A;}
+.flags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.flag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.flag.g{background:rgba(0,200,150,.1);color:#007A5A;}.flag.a{background:rgba(245,166,35,.12);color:#8A5500;}.flag.r{background:rgba(232,41,74,.1);color:#B0001E;}
+#s0{background:#0F2044;}
+.cv{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:530px;}
+.cvl{padding:40px 44px;display:flex;flex-direction:column;justify-content:center;gap:14px;}
+.cvey{font-size:10px;color:#00C896;letter-spacing:.15em;text-transform:uppercase;font-family:monospace;}
+.cvtt{font-size:38px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.02em;}
+.cvtt span{color:#00C896;}
+.cvds{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;}
+.cvmeta{display:flex;gap:20px;flex-wrap:wrap;}
+.cvm .ml{font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;font-family:monospace;}
+.cvm .mv{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px;}
+.cvr{padding:40px 36px;background:rgba(255,255,255,.03);border-left:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;justify-content:center;gap:10px;}
+.cvk{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 17px;}
+.cvkl{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;font-family:monospace;}
+.cvkv{font-size:22px;font-weight:800;color:#fff;margin:3px 0 2px;}
+.cvkc{font-size:11px;font-weight:600;}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-brand"><b>도르모르</b> × 오늘의집 TOPS 미팅 · 2026.06.04<span class="badge">INTERNAL</span></div>
+  <div class="nav-r">
+    <div class="nav-dots" id="dots"></div>
+    <button class="nbtn" onclick="go(-1)">&#8592;</button>
+    <span class="nctr" id="ctr">1 / 10</span>
+    <button class="nbtn" onclick="go(1)">&#8594;</button>
+    <button class="dl" onclick="dlHTML()">&#8595; HTML 저장</button>
+  </div>
+</nav>
+<div class="wrap">
+
+<!-- S0: COVER -->
+<div class="slide on" id="s0">
+  <div class="cv">
+    <div class="cvl">
+      <div class="cvey">TOPS MEETING · INTERNAL · brand_id 32942</div>
+      <div class="cvtt">도르모르<br><span>브랜드</span><br>미팅 자료</div>
+      <div class="cvds">26년 상반기 실적 분석 및 하반기 냉감·F/W 전략<br>오늘의집 인바운드 MD팀 · 비니</div>
+      <div class="cvmeta">
+        <div class="cvm"><div class="ml">Brand ID</div><div class="mv">32942</div></div>
+        <div class="cvm"><div class="ml">Shop ID</div><div class="mv">14580155</div></div>
+        <div class="cvm"><div class="ml">주력 카테</div><div class="mv">침구 · 쿠션 · 커튼</div></div>
+        <div class="cvm"><div class="ml">분석 기간</div><div class="mv">25.01 – 26.05</div></div>
+      </div>
+    </div>
+    <div class="cvr">
+      <div class="cvk"><div class="cvkl">순거래액 YoY</div><div class="cvkv" style="color:#00C896;">+13%</div><div class="cvkc" style="color:#00C896;">▲ 3.2억 → 3.6억원 (상반기 합산)</div></div>
+      <div class="cvk"><div class="cvkl">주문건수 YoY</div><div class="cvkv" style="color:#00C896;">+4%</div><div class="cvkc" style="color:#00C896;">▲ 5,579건 → 5,822건</div></div>
+      <div class="cvk"><div class="cvkl">취소율</div><div class="cvkv" style="color:#F5A623;">11.2%</div><div class="cvkc" style="color:#F5A623;">25H1과 동일 수준 — 관리 필요</div></div>
+      <div class="cvk"><div class="cvkl">26.05 최고점</div><div class="cvkv">1억 400만</div><div class="cvkc" style="color:#00C896;">YTD 최고 · 냉감 시즌 진입 신호</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S1: YoY -->
+<div class="slide" id="s1" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">01 · YoY 성장률</div><div class="st">26년 상반기 핵심 지표 — <em>안정적 성장 유지</em></div><div class="ssub">25.01~05 vs 26.01~05 · shop_id=14580155</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="kpis" style="grid-template-columns:1fr 1fr;">
+        <div class="kpi b"><div class="kl">순거래액 (26H1)</div><div class="kv">3.6억</div><div class="ks">25H1: 3.2억원</div><div class="kb up">▲ +13%</div></div>
+        <div class="kpi b"><div class="kl">주문건수</div><div class="kv">5,822건</div><div class="ks">25H1: 5,579건</div><div class="kb up">▲ +4%</div></div>
+        <div class="kpi a"><div class="kl">취소율</div><div class="kv">11.2%</div><div class="ks">25H1: 11.2%</div><div class="kb wa">— 동일</div></div>
+        <div class="kpi b"><div class="kl">노출수</div><div class="kv">3,352만</div><div class="ks">25H1: 3,042만</div><div class="kb up">▲ +10%</div></div>
+      </div>
+      <div class="ib g"><span style="font-size:14px;flex-shrink:0;">📈</span><div><strong>안정적 성장 구조.</strong> 26H1 상반기 월 최고점이 26.05 1억 400만원으로 26년 들어 지속 우상향. 냉감 시즌 진입 시 추가 상승 기대.</div></div>
+      <div class="ib a"><span style="font-size:14px;flex-shrink:0;">⚠️</span><div>취소율 11.2%가 2년째 고정. 침구 카테고리 특성(사이즈·색상 미스매치)이지만 구조적 개선 필요.</div></div>
+    </div>
+    <div>
+      <table class="tbl">
+        <thead><tr><th>지표</th><th>25H1</th><th>26H1</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>순거래액</td><td>3억 2,106만</td><td>3억 6,337만</td><td class="cu">▲+13%</td></tr>
+          <tr><td>결제거래액</td><td>3억 7,894만</td><td>4억 2,966만</td><td class="cu">▲+13%</td></tr>
+          <tr><td>취소율</td><td>11.2%</td><td>11.2%</td><td class="ca">— 동일</td></tr>
+          <tr><td>주문건수</td><td>5,579건</td><td>5,822건</td><td class="cu">▲+4%</td></tr>
+          <tr><td>노출수</td><td>3,042만</td><td>3,352만</td><td class="cu">▲+10%</td></tr>
+          <tr><td>PDP 조회</td><td>988,923건</td><td>871,212건</td><td class="cr">▼-12%</td></tr>
+        </tbody>
+      </table>
+      <div class="ib r" style="margin-top:10px;"><span style="font-size:13px;flex-shrink:0;">🔍</span><div><strong>PDP 조회 -12% 주목.</strong> 노출은 늘었는데 클릭률이 낮아짐 → 썸네일 또는 상품명 CTR 개선 필요.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform · period_base='month' · shop_id=14580155</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S2: GMV 추이 -->
+<div class="slide" id="s2" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">02 · 거래액 추이</div><div class="st">월별 순거래액 추이 — <em>25.09 피크 → 26.05 재상승</em></div><div class="ssub">comm_product_perform · 단위: 만원 / 우축: 취소율(%)</div></div>
+  <div class="srule"></div>
+  <div class="sbd">
+    <div style="display:flex;gap:14px;margin-bottom:8px;font-size:11px;color:#8E97B4;">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#1B4FBE;"></span>26년</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(27,79,190,.2);"></span>25년</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#E8294A;"></span>취소율</span>
+    </div>
+    <canvas id="gmvC" height="270" style="width:100%;display:block;" role="img" aria-label="도르모르 월별 GMV 추이"></canvas>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;">
+      <div class="ib b"><span style="font-size:13px;flex-shrink:0;">📈</span><div><strong>26.05 1억 400만 — 26년 최고점 갱신.</strong> 이사철(3월) + 냉감 시즌(5~8월) 기대감 반영. 7~9월 추가 피크 가능.</div></div>
+      <div class="ib a"><span style="font-size:13px;flex-shrink:0;">⚠️</span><div>25.09 피크(1억 75만)를 26년에 넘기 위해 추석 선물 세트 + 단독 냉감 상품 준비 필요.</div></div>
+      <div class="ib g"><span style="font-size:13px;flex-shrink:0;">💡</span><div>26.01 저점(5,401만) → 26.05 1억 400만으로 4개월 연속 상승. 상승 추세 지속 중.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform · period_base='month'</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S3: 카테고리별 분석 -->
+<div class="slide" id="s3" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">03 · 카테고리별 분석</div><div class="st">6개 카테고리 운영 — <em>침구 62% · 커튼 16% · 쿠션 11%</em></div><div class="ssub">commerce_gross_profit · 25.12~26.05 · 카테고리별 GMV 구성</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <table class="tbl">
+        <thead><tr><th>카테고리</th><th>상품수</th><th>GMV</th><th>수량</th><th>평균가</th><th>평균리뷰</th></tr></thead>
+        <tbody>
+          <tr><td><b>침구</b></td><td>189개</td><td class="cb"><b>2억7,746만</b></td><td>4,726개</td><td>61,143원</td><td class="cu">214건</td></tr>
+          <tr><td><b>커튼/블라인드</b></td><td>2개</td><td class="cb"><b>7,235만</b></td><td>1,599개</td><td>37,800원</td><td class="cu">462건</td></tr>
+          <tr><td>쿠션/방석</td><td>29개</td><td>4,798만</td><td>1,834개</td><td>26,682원</td><td>163건</td></tr>
+          <tr><td>홈패브릭/커버</td><td>8개</td><td>2,715만</td><td>528개</td><td>30,213원</td><td>160건</td></tr>
+          <tr><td>러그/카페트/매트</td><td>9개</td><td>1,998만</td><td>234개</td><td>61,439원</td><td>57건</td></tr>
+          <tr><td>고양이리빙</td><td>3개</td><td>273만</td><td>43개</td><td>47,860원</td><td>40건</td></tr>
+        </tbody>
+      </table>
+      <div class="ib r" style="margin-top:8px;"><span style="font-size:13px;flex-shrink:0;">🚨</span><div><strong>커튼 2개 상품으로 7,235만원 = 개당 3,600만원.</strong> 레트로·에센셜 커튼이 리뷰 434·530건으로 검색 1~2위 장악. 커튼 라인 확장 여지 큼.</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="position:relative;height:220px;">
+        <canvas id="cateC" style="width:100%;height:100%;" role="img" aria-label="카테고리별 GMV 도넛차트"></canvas>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:#8E97B4;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#1B4FBE;"></span>침구 62%</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#00C896;"></span>커튼/블라인드 16%</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#F5A623;"></span>쿠션/방석 11%</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#7F77DD;"></span>홈패브릭 6%</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#E8294A;"></span>러그 4%</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#D8DEF0;"></span>고양이리빙 1%</span>
+      </div>
+      <div class="ib b"><span style="font-size:13px;flex-shrink:0;">💡</span><div>커튼 상품 단 2개로 16% GMV — 리뷰 파워 입증. 신규 커튼 디자인 추가 시 즉각 GMV 레버리지 가능.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.commerce_gross_profit + prism_d_product_info_latest · brand_id=32942</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S4: 상품별 분석 -->
+<div class="slide" id="s4" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">04 · 상품별 분석</div><div class="st">GMV TOP 15 & <em>단독 상품 아이스트레이 냉감패드</em></div><div class="ssub">commerce_gross_profit · 25.12~26.05 · is_exclusive=1 단독 상품 포함</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1.1fr 1fr;gap:16px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#8E97B4;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">상품별 GMV 순위 TOP 15 (25.12~26.05)</div>
+      <div id="prodList"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:10px;font-weight:700;color:#8E97B4;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;">단독 상품 현황</div>
+      <div style="background:#EBF1FD;border:1px solid rgba(27,79,190,.2);border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+        <div style="font-size:10px;font-weight:700;color:#1B4FBE;">[오늘의집 단독] 블랙 듀라론 아이스트레이 냉감패드</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;">
+          <div><span style="color:#8E97B4;">판매가</span><br><b>99,000원</b></div>
+          <div><span style="color:#8E97B4;">리뷰</span><br><b style="color:#00C896;">53건 ★4.81</b></div>
+          <div><span style="color:#8E97B4;">25.12~26.05 GMV</span><br><b class="cb">2,217만원</b></div>
+          <div><span style="color:#8E97B4;">판매 수량</span><br><b>218개</b></div>
+          <div><span style="color:#8E97B4;">SRP 노출(26.03~05)</span><br><b>127,577건</b></div>
+          <div><span style="color:#8E97B4;">SRP CVR</span><br><b style="color:#00C896;">0.99%</b></div>
+        </div>
+      </div>
+      <div class="ib g"><span style="font-size:13px;flex-shrink:0;">🌟</span><div><strong>단독 냉감패드 CVR 0.99% — 브랜드 내 SRP 최고 CVR.</strong> 리뷰 53건이 쌓이면서 냉감 시즌(6~8월) 폭발 성장 기대. 재고 준비 시급.</div></div>
+      <div class="ib a"><span style="font-size:13px;flex-shrink:0;">⚠️</span><div>커튼(레트로·에센셜)이 각각 434·530건 리뷰로 전체 GMV 상위권 진입. 단 2종인데 월 평균 1,200만원 수준 — 신규 커튼 라인 확장 절실.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.commerce_gross_profit + prism_d_product_info_latest · brand_id=32942</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S5: PLP 퍼널 -->
+<div class="slide" id="s5" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">05 · PLP 퍼널</div><div class="st">지면별 노출 → 구매 전환 — <em>기획전 낭비 · 묶음배송 기회</em></div><div class="ssub">comm_product_perform_att · 25.12~26.05 · CVR = PDP조회→구매</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1.1fr 1fr;gap:16px;">
+    <div>
+      <table class="tbl" style="font-size:10px;">
+        <thead><tr><th>지면</th><th>노출</th><th>PDP조회</th><th>구매</th><th>GMV</th><th>CVR</th></tr></thead>
+        <tbody>
+          <tr><td><b>묶음배송</b></td><td>113,289</td><td>3,119</td><td>35</td><td>172만</td><td class="cu"><b>1.12%</b></td></tr>
+          <tr><td>장바구니</td><td>212,615</td><td>36,486</td><td>309</td><td class="cb">2,518만</td><td class="cu">0.85%</td></tr>
+          <tr><td>기타(ETC)</td><td>1,269,183</td><td>66,304</td><td>434</td><td class="cb">2,779만</td><td class="cu">0.65%</td></tr>
+          <tr><td>브랜드페이지</td><td>2,800,224</td><td>108,430</td><td>566</td><td class="cb">3,152만</td><td>0.52%</td></tr>
+          <tr><td>검색(SRP)</td><td>7,722,221</td><td>264,739</td><td>1,014</td><td class="cb">6,092만</td><td>0.38%</td></tr>
+          <tr><td>PDP</td><td>4,737,162</td><td>188,577</td><td>565</td><td>3,557만</td><td>0.30%</td></tr>
+          <tr><td>내부광고(AD)</td><td class="cr"><b>5,081,784</b></td><td>20,861</td><td>8</td><td>96만</td><td class="cr">0.04%</td></tr>
+          <tr><td><b>기획전</b></td><td class="cr"><b>2,484,650</b></td><td>18,255</td><td>13</td><td>79만</td><td class="cr"><b>0.07%</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:11px;font-weight:700;color:#0F2044;margin-bottom:2px;">CVR 순위</div>
+      <div id="fBars"></div>
+      <div class="ib r"><span style="font-size:13px;flex-shrink:0;">🚨</span><div><strong>기획전 노출 248만건 + 광고 508만건 — CVR 각 0.07%, 0.04%.</strong> 합산 750만건 노출이 낭비되는 중. 즉시 참여 상품 교체 필요.</div></div>
+      <div class="ib g"><span style="font-size:13px;flex-shrink:0;">💡</span><div>묶음배송 CVR 1.12% 상위권. 침구 세트(이불+베개커버+패드) 묶음 기획 시 단가·전환 동시 상승 가능.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform_att · yyyymm IN ('202512'~'202605')</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S6: 유입채널 -->
+<div class="slide" id="s6" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">06 · 유입채널</div><div class="st">Organic 89% — <em>압도적 자연유입 강점</em></div><div class="ssub">comm_product_perform_att · 26.03~05</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <table class="tbl">
+        <thead><tr><th>채널</th><th>노출</th><th>PDP조회</th><th>구매</th><th>GMV</th><th>비중</th></tr></thead>
+        <tbody>
+          <tr><td><b>Organic</b></td><td>12,726,174</td><td>369,683</td><td>1,522</td><td class="cb">1억 16만</td><td class="cb"><b>89%</b></td></tr>
+          <tr><td><b>Paid</b></td><td>1,364,591</td><td>34,821</td><td>121</td><td>810만</td><td>7%</td></tr>
+          <tr><td><b>Nonpaid</b></td><td>677,584</td><td>18,003</td><td>55</td><td>430만</td><td>4%</td></tr>
+        </tbody>
+      </table>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div class="kpi b"><div class="kl">Organic CVR</div><div class="kv" style="font-size:16px;">0.41%</div></div>
+        <div class="kpi a"><div class="kl">Paid CVR</div><div class="kv" style="font-size:16px;">0.35%</div></div>
+        <div class="kpi g"><div class="kl">Organic 비중</div><div class="kv" style="font-size:16px;">89%</div></div>
+      </div>
+      <div class="ib g"><span style="font-size:13px;flex-shrink:0;">✅</span><div><strong>Organic 89% — 도르모르의 핵심 강점.</strong> ★200~800건 리뷰가 자연 검색 우위 만든 결과. 이 강점은 신규 상품에 리뷰 유도하면 복제 가능.</div></div>
+      <div class="ib r"><span style="font-size:13px;flex-shrink:0;">⚠️</span><div>Paid CVR(0.35%) < Organic CVR(0.41%) — 광고 효율 낮음. 내부광고 CVR 0.03%는 즉시 재검토 필요.</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="font-size:11px;font-weight:700;color:#0F2044;">GMV 채널 구성</div>
+      <canvas id="chPie" width="160" height="160" style="display:block;" role="img" aria-label="채널별 GMV 도넛차트"></canvas>
+      <div style="font-size:11px;color:#8E97B4;display:flex;flex-direction:column;gap:4px;width:100%;">
+        <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:2px;background:#1B4FBE;"></span>Organic 89% — 1억 16만</div>
+        <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:2px;background:#F5A623;"></span>Paid 7% — 810만</div>
+        <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:2px;background:#D8DEF0;"></span>Nonpaid 4% — 430만</div>
+      </div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform_att · yyyymm IN ('202603','202604','202605')</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S7: 경쟁 브랜드 -->
+<div class="slide" id="s7" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">07 · 경쟁 브랜드</div><div class="st">침구 카테고리 <em>경쟁 지형 — 헬로우슬립·마틸라 양강 구도</em></div><div class="ssub">commerce_gross_profit · 침구 카테고리 GMV 상위 8개 브랜드 · 단위: 억원</div></div>
+  <div class="srule"></div>
+  <div class="sbd">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;font-size:11px;color:#8E97B4;" id="compLeg"></div>
+    <canvas id="compC" height="290" style="width:100%;display:block;" role="img" aria-label="침구 경쟁 브랜드 GMV 추이"></canvas>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;">
+      <div class="ib r"><span style="font-size:13px;flex-shrink:0;">🏅</span><div><strong>헬로우슬립 압도적 1위</strong>(월 10~15억). 마틸라 2위. 도르모르는 이 카테고리 GMV 규모에선 다른 포지션.</div></div>
+      <div class="ib a"><span style="font-size:13px;flex-shrink:0;">⚠️</span><div>픽켄드·베이직톤이 26년 들어 꾸준히 성장 중 — 비슷한 가격대 경쟁 심화. 차별화 필요.</div></div>
+      <div class="ib b"><span style="font-size:13px;flex-shrink:0;">💡</span><div>도르모르는 <strong>알러지케어 + 먼지없는 + 생활방수</strong> 포지션으로 기능성 침구 틈새 점유. 이 포지션 강화가 핵심.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.commerce_gross_profit · cate_d2='침구' · 25.01~26.05</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S8: 신상품 -->
+<div class="slide" id="s8" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">08 · 신상품 현황</div><div class="st">신상품 등록 추이 & <em>26년 1~5월 단 17개 — 보완 필요</em></div><div class="ssub">comm_product_perform · shop_id=14580155 · 25.06~26.05</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <canvas id="npC" height="220" style="width:100%;display:block;" role="img" aria-label="신상품 등록 추이"></canvas>
+      <div class="ib a"><span style="font-size:13px;flex-shrink:0;">⚠️</span><div><strong>26년 1~5월 신상품 17개.</strong> 25.08에 39개 집중 등록 후 26년 산발적. 냉감 시즌 전 신규 SKU 집중 투입 필요.</div></div>
+      <div class="ib g"><span style="font-size:13px;flex-shrink:0;">✅</span><div>26.03 13개 집중 등록 → 26.04~05 GMV 반등(1,057만 → 1억 400만). 신상품 효과 직접 확인.</div></div>
+    </div>
+    <div>
+      <table class="tbl" style="font-size:10px;">
+        <thead><tr><th>월</th><th>신상품</th><th>판매중</th><th>품절</th><th>월 GMV</th></tr></thead>
+        <tbody>
+          <tr><td>25.08</td><td class="cu"><b>39</b></td><td>8,305</td><td class="ca">66</td><td>9,818만</td></tr>
+          <tr><td>25.09</td><td class="cr">0</td><td>8,340</td><td class="cr">84</td><td class="cu"><b>1억 75만</b></td></tr>
+          <tr><td>25.10</td><td>1</td><td>8,622</td><td class="cr">91</td><td>8,002만</td></tr>
+          <tr><td>25.12</td><td class="cr">0</td><td>8,267</td><td>76</td><td>6,688만</td></tr>
+          <tr><td>26.01</td><td class="cr">0</td><td>8,007</td><td class="cr">86</td><td>5,401만</td></tr>
+          <tr><td>26.02</td><td class="cr">0</td><td>7,084</td><td>73</td><td>6,578만</td></tr>
+          <tr><td>26.03</td><td class="cu">13</td><td>7,954</td><td>70</td><td>5,937만</td></tr>
+          <tr><td>26.04</td><td>2</td><td>7,983</td><td>80</td><td>8,012만</td></tr>
+          <tr><td>26.05</td><td>1</td><td>8,325</td><td>78</td><td class="cu"><b>1억 400만</b></td></tr>
+        </tbody>
+      </table>
+      <div class="ib r" style="margin-top:6px;"><span style="font-size:13px;flex-shrink:0;">🚨</span><div>26.05 품절 78개. 냉감 시즌 수요 증가 중 — 단독 냉감패드 품절 여부 즉시 확인 필요.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform · period_base='month' · shop_id=14580155</span><span>INTERNAL · 2026-06-04</span></div>
+</div>
+
+<!-- S9: 액션 플랜 -->
+<div class="slide" id="s9" style="position:relative;background:#0F2044;">
+  <div class="shd" style="padding:24px 28px 0;">
+    <div class="stag" style="color:#00C896;">09 · 하반기 성장 전략 & 액션 플랜</div>
+    <div class="st" style="color:#fff;font-size:20px;">냉감 시즌 × 단독 확장 × 커튼 라인 — <em style="color:#00C896;">26년 하반기 3대 성장 축</em></div>
+    <div class="ssub" style="color:rgba(255,255,255,.4);">분석 기준 2026-06-04 · 오늘의집 IB팀 · 비니 MD</div>
+  </div>
+  <div style="height:2px;background:linear-gradient(90deg,#1B4FBE,#00C896);margin:10px 28px;"></div>
+  <div class="sbd" style="padding:0 28px 14px;">
+    <div class="flags">
+      <div class="flag g">🟢 YoY +13% 안정 성장</div>
+      <div class="flag g">🟢 Organic 89% 강점</div>
+      <div class="flag g">🟢 단독 냉감패드 CVR 0.99%</div>
+      <div class="flag g">🟢 26.05 1억 400만 최고점 갱신</div>
+      <div class="flag a">🟡 취소율 11.2% 고정</div>
+      <div class="flag a">🟡 PDP 조회 -12%</div>
+      <div class="flag r">🔴 기획전+광고 CVR 0.04~0.07% 낭비</div>
+      <div class="flag r">🔴 커튼 단 2종 의존</div>
+    </div>
+    <div class="acg">
+      <div class="ac"><div class="ac-n">ACTION 01 · 즉시</div><div class="ac-t">단독 냉감패드 재고 보충 + 추가 단독 기획</div><div class="ac-d">CVR 0.99% × 냉감 피크 시즌. 재고 소진 전 보충. 냉감 베개패드·토퍼 단독 추가 논의.</div><div class="aw aw-p">파트너 → 6월말</div></div>
+      <div class="ac"><div class="ac-n">ACTION 02 · 즉시</div><div class="ac-t">기획전·광고 참여 상품 전면 교체</div><div class="ac-d">기획전 CVR 0.07%·광고 CVR 0.04% — 최다 노출 지면이 최악 효율. 아이스트레이 냉감패드·커튼으로 교체.</div><div class="aw aw-p">MD 주도 → 즉시</div></div>
+      <div class="ac"><div class="ac-n">ACTION 03 · 7월</div><div class="ac-t">커튼 신규 라인 소싱</div><div class="ac-d">커튼 2종으로 7,235만원. 단 2개가 전체 16%. 신규 디자인 3~5종 추가 시 즉각 GMV 확장 가능.</div><div class="aw aw-b">MD + 파트너 → 7월</div></div>
+      <div class="ac"><div class="ac-n">ACTION 04 · 7월</div><div class="ac-t">침구 묶음 세트 기획</div><div class="ac-d">묶음배송 CVR 1.12%. 이불+베개커버+패드 3종 세트 구성으로 단가 UP + 전환 유지.</div><div class="aw aw-b">MD + 파트너 → 7월</div></div>
+      <div class="ac"><div class="ac-n">ACTION 05 · 8월</div><div class="ac-t">추석 침구 선물 세트 등록</div><div class="ac-d">25.09 피크 1억 75만 재현. 알러지케어 차렵이불세트를 선물 포장 버전으로 추석 전 등록.</div><div class="aw aw-p">파트너 → 8월</div></div>
+      <div class="ac hi"><div class="ac-n">핵심 메시지</div><div class="ac-t">냉감패드 CVR 0.99% — 지금이 단독 확장 골든타임 🏆</div><div class="ac-d">리뷰 53건인데 CVR 1%에 가까움. 리뷰 100건 넘어가면 검색 1위권 진입. 커튼 라인 확장까지 더하면 하반기 월 1.5억 가능한 구조.</div></div>
+    </div>
+  </div>
+  <div class="sft" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.07);color:rgba(255,255,255,.25);">
+    <span>오늘의집 IB팀 내부용 · 외부 배포 금지</span><span>INTERNAL · 2026-06-04 · PRISM/Athena</span>
+  </div>
+</div>
+
+</div>
+<script>
+const SN=10;let CUR=0;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<SN;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);}
+function goTo(n){
+  if(n<0||n>=SN)return;
+  document.querySelectorAll('.slide').forEach((s,i)=>s.classList.toggle('on',i===n));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===n));
+  CUR=n;document.getElementById('ctr').textContent=`${n+1} / ${SN}`;
+  setTimeout(drawCharts,60);
+}
+function go(d){goTo(CUR+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+function dlHTML(){const b=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='도르모르_TOPS미팅_20260604.html';a.click();}
+
+const BLUE='#1B4FBE',ACC='#00C896',RED='#E8294A',AMB='#F5A623',PUR='#7F77DD',GRAY='#D8DEF0';
+const MONTHS=['25.01','25.02','25.03','25.04','25.05','25.06','25.07','25.08','25.09','25.10','25.11','25.12','26.01','26.02','26.03','26.04','26.05'];
+const GMV_NET=[6616,9172,6546,4856,4916,6317,8575,9818,10075,8002,8064,6688,5401,6578,5937,8012,10408];
+const CANCEL=[11.4,12.9,13.1,9.3,8.2,9.2,11.0,13.4,14.2,12.0,11.7,11.6,13.6,10.2,11.0,10.6,11.3];
+
+const COMP_BRANDS=['헬로우슬립','마틸라','쁘리엘르','베이직톤','아름드리홈','픽켄드','아토앤알로','아망떼'];
+const COMP_COLS=[BLUE,RED,ACC,AMB,'#888780',PUR,'#60A5FA','#F87171'];
+const COMP_DATA={
+  '헬로우슬립':[9715,15097,12771,12012,12096,15057,9764,8651,10007,11741,14654,11056,10703,12896,11951,10710,12613],
+  '마틸라':[7826,11791,8882,9218,11741,13870,7927,6124,6511,8423,8975,6252,6657,6858,7947,6876,10215],
+  '쁘리엘르':[2638,3927,3275,3431,4606,6820,4286,4604,5112,4966,5614,4093,4122,5441,5501,5262,6583],
+  '베이직톤':[4090,4705,3851,3396,3690,4999,3554,3266,4281,6849,7498,5870,4959,4411,4698,5122,5547],
+  '아름드리홈':[3165,4379,3178,2815,2941,4340,2884,2794,2888,3685,3831,3237,2986,4027,4331,4513,5579],
+  '픽켄드':[1226,2010,1919,2280,2475,2350,2435,2819,3174,3518,3417,2951,3287,4740,4720,4473,5202],
+  '아토앤알로':[1210,1630,1384,1170,1015,1204,1054,1167,1211,1140,1449,1504,1703,1686,1703,1597,1674],
+  '아망떼':[1155,1699,1470,1526,1404,1756,1055,1028,868,1005,989,1112,1483,1801,1685,1533,2035],
+};
+
+const legEl=document.getElementById('compLeg');
+if(legEl){COMP_BRANDS.forEach((b,i)=>{const s=document.createElement('span');s.style.cssText='display:flex;align-items:center;gap:4px;';s.innerHTML=`<span style="width:10px;height:10px;border-radius:2px;background:${COMP_COLS[i]};"></span>${b}`;legEl.appendChild(s);});}
+
+function drawDonut(id,vals,colors,W,H){
+  const c=document.getElementById(id);if(!c)return;c.width=W||160;c.height=H||160;
+  const ctx=c.getContext('2d');const cx=(W||160)/2,cy=(H||160)/2,r=Math.min(cx,cy)-10,ir=r*0.6;
+  const total=vals.reduce((a,b)=>a+b,0);let sa=-Math.PI/2;
+  vals.forEach((v,i)=>{const sw=v/total*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,sa,sa+sw);ctx.closePath();ctx.fillStyle=colors[i];ctx.fill();sa+=sw;});
+  ctx.beginPath();ctx.arc(cx,cy,ir,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+}
+
+function drawCharts(){
+  const tc='#9CA3AF',gc='#EEF1F8';
+  if(CUR===1){
+    const c=document.getElementById('gmvC');if(!c)return;
+    const W=c.offsetWidth||900,H=c.height||270;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);
+    const PAD={t:12,r:50,b:30,l:55};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+    const n=MONTHS.length;const gap=CW/n;const bw=Math.max(4,gap*0.55);
+    const maxV=11000;const maxC=16;
+    for(let i=0;i<=4;i++){const y=PAD.t+CH*(1-i/4);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle=gc;ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=tc;ctx.font='9px -apple-system,sans-serif';ctx.textAlign='right';ctx.fillText(Math.round(maxV*i/4/100)*100+'만',PAD.l-4,y+3);}
+    GMV_NET.forEach((v,i)=>{const x=PAD.l+i*gap+(gap-bw)/2;const h=v/maxV*CH;ctx.fillStyle=i>=12?BLUE:'rgba(27,79,190,0.22)';if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,PAD.t+CH-h,bw,h,3);ctx.fill();}else ctx.fillRect(x,PAD.t+CH-h,bw,h);});
+    ctx.strokeStyle=RED;ctx.lineWidth=1.8;ctx.beginPath();let f=true;
+    CANCEL.forEach((v,i)=>{const x=PAD.l+i*gap+gap/2;const y=PAD.t+CH*(1-v/maxC);f?ctx.moveTo(x,y):ctx.lineTo(x,y);f=false;});
+    ctx.stroke();
+    CANCEL.forEach((v,i)=>{const x=PAD.l+i*gap+gap/2;const y=PAD.t+CH*(1-v/maxC);ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=RED;ctx.fill();});
+    for(let i=0;i<=4;i++){const y=PAD.t+CH*(1-i/4);ctx.fillStyle=RED;ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText((maxC*i/4).toFixed(0)+'%',W-PAD.r+4,y+3);}
+    MONTHS.forEach((m,i)=>{if(i%2===0){const x=PAD.l+i*gap+gap/2;ctx.fillStyle=tc;ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(m,x,PAD.t+CH+15);}});
+  }
+  if(CUR===2)drawDonut('cateC',[277,72,48,27,20,3],[BLUE,ACC,AMB,PUR,RED,GRAY],null,220);
+  if(CUR===3){
+    const prodEl=document.getElementById('prodList');
+    if(prodEl&&!prodEl.dataset.done){
+      prodEl.dataset.done='1';
+      const prods=[
+        {n:'레트로 패턴 쉬폰 방문 가리개 커튼 14colors',g:5218,r:434,ex:0,c:'커튼'},
+        {n:'[단독] 블랙 듀라론 아이스트레이 냉감패드',g:2217,r:53,ex:1,c:'침구'},
+        {n:'에센셜 패턴 쉬폰 방문 가리개 커튼 10colors',g:2018,r:530,ex:0,c:'커튼'},
+        {n:'생활방수 블랙 마이크로 알러지케어 차렵이불세트',g:1541,r:828,ex:0,c:'침구'},
+        {n:'논더스트 워싱 프릴 알러지케어 베드스커트 9colors',g:1166,r:760,ex:0,c:'침구'},
+        {n:'논더스트 먼지없는 알러지케어 패턴 베개커버 16colors',g:1083,r:317,ex:0,c:'침구'},
+        {n:'생활방수 블랙 마이크로 알러지케어 매트리스커버',g:986,r:898,ex:0,c:'침구'},
+        {n:'레트로 패턴 60수 고밀도 베개커버 8colors',g:908,r:149,ex:0,c:'침구'},
+        {n:'레트로 패턴 양면 순면 극세사 담요 10colors',g:891,r:103,ex:0,c:'홈패브릭'},
+        {n:'논더스트 워싱 프릴 사계절 차렵이불세트 9colors',g:885,r:215,ex:0,c:'침구'},
+        {n:'숨쉬는 부드러운 순면 양면 무소음 여름이불세트',g:870,r:47,ex:0,c:'침구'},
+        {n:'논더스트 워싱 알러지케어 사계절 차렵이불세트 9colors',g:864,r:321,ex:0,c:'침구'},
+        {n:'생활방수 블랙 마이크로 알러지케어 토퍼패드',g:855,r:534,ex:0,c:'침구'},
+        {n:'도트 순면 삼각 등쿠션 커버 2colors',g:795,r:37,ex:0,c:'쿠션'},
+        {n:'누빔선 없는 털방지 알러지케어 마이크로 방수패드',g:780,r:288,ex:0,c:'침구'},
+      ];
+      const mx=5218;
+      prods.forEach((p,i)=>{
+        const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid #EEF1F8;';
+        const col=p.ex?PUR:p.c==='커튼'?ACC:BLUE;
+        row.innerHTML=`<span style="font-size:10px;color:#8E97B4;width:16px;text-align:right;">${i+1}</span>${p.ex?`<span style="font-size:9px;padding:1px 5px;border-radius:4px;background:rgba(127,119,221,.12);color:#3D3880;white-space:nowrap;flex-shrink:0;">단독</span>`:p.c==='커튼'?`<span style="font-size:9px;padding:1px 5px;border-radius:4px;background:rgba(0,200,150,.1);color:#007A5A;white-space:nowrap;flex-shrink:0;">커튼</span>`:''}<div style="flex:1;min-width:0;"><span style="font-size:10px;color:#0F2044;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.n}</span><span style="font-size:9px;color:#8E97B4;">★${p.r}건</span></div><div style="width:70px;height:4px;background:#EEF1F8;border-radius:2px;overflow:hidden;flex-shrink:0;"><div style="width:${Math.round(p.g/mx*100)}%;height:100%;background:${col};border-radius:2px;"></div></div><span style="font-size:10px;font-weight:500;color:#0F2044;white-space:nowrap;">${p.g}만</span>`;
+        prodEl.appendChild(row);
+      });
+    }
+  }
+  if(CUR===4){
+    const fbEl=document.getElementById('fBars');
+    if(fbEl&&!fbEl.dataset.done){
+      fbEl.dataset.done='1';
+      const plp=[{l:'묶음배송',v:1.12,c:ACC},{l:'장바구니',v:0.85,c:BLUE},{l:'기타(ETC)',v:0.65,c:BLUE},{l:'브랜드페이지',v:0.52,c:BLUE},{l:'검색(SRP)',v:0.38,c:AMB},{l:'PDP',v:0.30,c:AMB},{l:'카테고리',v:0.21,c:AMB},{l:'기획전',v:0.07,c:RED},{l:'내부광고',v:0.04,c:RED}];
+      const mx=1.12;
+      plp.forEach(d=>{const r=document.createElement('div');r.className='fb';r.innerHTML=`<div class="fb-l">${d.l}</div><div class="fb-w"><div class="fb-b" style="width:${Math.round(d.v/mx*100)}%;background:${d.c};"><span>${d.v.toFixed(2)}%</span></div></div><div class="fb-v" style="color:${d.c}">${d.v.toFixed(2)}%</div>`;fbEl.appendChild(r);});
+    }
+  }
+  if(CUR===5)drawDonut('chPie',[100164150,8105250,4299200],[BLUE,AMB,GRAY],160,160);
+  if(CUR===6){
+    const c=document.getElementById('compC');if(!c)return;
+    const W=c.offsetWidth||900,H=c.height||290;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);
+    const maxV=Math.max(...Object.values(COMP_DATA).flat())*1.1;
+    const PAD={t:10,r:12,b:26,l:55};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+    const n=MONTHS.length;const gap=CW/(n-1);
+    [0,.25,.5,.75,1].forEach(p=>{const y=PAD.t+CH*(1-p);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle='#EEF1F8';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=tc;ctx.font='9px -apple-system,sans-serif';ctx.textAlign='right';ctx.fillText((maxV*p/1000).toFixed(0)+'억',PAD.l-4,y+3);});
+    COMP_BRANDS.forEach((b,bi)=>{
+      const vals=COMP_DATA[b];ctx.strokeStyle=COMP_COLS[bi];ctx.lineWidth=bi===0?2.5:1.5;
+      if(bi>0)ctx.setLineDash([4,3]);else ctx.setLineDash([]);
+      ctx.beginPath();vals.forEach((v,i)=>{const x=PAD.l+i*gap;const y=PAD.t+CH*(1-v/maxV*100);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+      ctx.stroke();ctx.setLineDash([]);
+    });
+    MONTHS.forEach((m,i)=>{if(i%2===0){const x=PAD.l+i*gap;ctx.fillStyle=tc;ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(m.slice(2),x,PAD.t+CH+14);}});
+  }
+  if(CUR===7){
+    const c=document.getElementById('npC');if(!c)return;
+    const W=c.offsetWidth||420,H=c.height||220;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);
+    const npM=['25.06','25.07','25.08','25.09','25.10','25.11','25.12','26.01','26.02','26.03','26.04','26.05'];
+    const npV=[1,0,39,0,1,0,0,0,0,13,2,1];
+    const PAD={t:10,r:10,b:26,l:36};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+    const n=npM.length;const gap=CW/n;const bw=Math.max(4,gap*0.6);
+    const maxV=40;
+    [0,10,20,30,40].forEach(v=>{const y=PAD.t+CH*(1-v/maxV);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle='#EEF1F8';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=tc;ctx.font='9px -apple-system,sans-serif';ctx.textAlign='right';ctx.fillText(v,PAD.l-3,y+3);});
+    npV.forEach((v,i)=>{const x=PAD.l+i*gap+(gap-bw)/2;const h=v/maxV*CH;const col=v===0?'rgba(232,41,74,0.2)':v>=10?ACC:v>=5?AMB:BLUE;if(h>0){if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,PAD.t+CH-h,bw,h,3);ctx.fillStyle=col;ctx.fill();}else{ctx.fillStyle=col;ctx.fillRect(x,PAD.t+CH-h,bw,h);}}else{ctx.fillStyle=col;ctx.fillRect(x,PAD.t+CH-2,bw,2);}ctx.fillStyle=tc;ctx.font='8px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(npM[i],x+bw/2,PAD.t+CH+14);if(v>0){ctx.fillStyle='#0F2044';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(v,x+bw/2,PAD.t+CH-h-4);}});
+  }
+}
+setTimeout(drawCharts,100);
+window.addEventListener('resize',()=>setTimeout(drawCharts,100));
+</script>
+</body>
+</html>
