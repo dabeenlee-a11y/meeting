@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>솔솔푸른솔 TOPS 미팅 | 2026.06.03</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#0F2044;--blue:#1B4FBE;--accent:#00C896;--red:#E8294A;
+  --amber:#F5A623;--gray-50:#F8F9FC;--gray-100:#EEF1F8;--gray-200:#D8DEF0;
+  --gray-400:#8E97B4;--white:#FFFFFF;
+}
+body{background:#0A0E1A;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#1E2340;height:100vh;display:flex;flex-direction:column;align-items:center;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(10,14,26,.97);border-bottom:1px solid rgba(255,255,255,.08);z-index:100;}
+.nav-brand{color:rgba(255,255,255,.5);font-size:12px;letter-spacing:.05em;}
+.nav-brand b{color:#fff;}
+.badge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(245,166,35,.18);color:#F5A623;border:1px solid rgba(245,166,35,.3);margin-left:6px;font-family:monospace;}
+.nav-r{display:flex;align-items:center;gap:8px;}
+.tab{font-size:11px;padding:4px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;}
+.tab.on{background:#1B4FBE;border-color:#1B4FBE;color:#fff;}
+.nav-dots{display:flex;gap:5px;align-items:center;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:all .2s;}
+.dot.on{background:#00C896;width:16px;border-radius:3px;}
+.nbtn{width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.nbtn:hover{background:#1B4FBE;}
+.nctr{font-size:11px;color:rgba(255,255,255,.3);min-width:38px;text-align:center;}
+.dl{font-size:11px;padding:5px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;}
+.dl:hover{background:#00C896;color:#0F2044;border-color:#00C896;}
+
+/* SLIDES */
+.wrap{width:1140px;max-width:98vw;margin-top:58px;position:relative;}
+.slide{display:none;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,.5);flex-direction:column;min-height:630px;}
+.slide.on{display:flex;}
+
+/* SLIDE COMMON */
+.lbar{position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#1B4FBE,#00C896);}
+.shd{padding:20px 28px 0;flex-shrink:0;}
+.stag{font-size:9px;font-weight:700;letter-spacing:.12em;color:#1B4FBE;text-transform:uppercase;}
+.st{font-size:20px;font-weight:700;color:#0F2044;margin-top:4px;line-height:1.25;}
+.st em{color:#1B4FBE;font-style:normal;}
+.ssub{font-size:11px;color:#8E97B4;margin-top:3px;}
+.srule{height:2px;background:linear-gradient(90deg,#1B4FBE,#00C896);margin:10px 28px;flex-shrink:0;}
+.sbd{padding:0 28px 14px;overflow-y:auto;flex:1;}
+.sft{padding:7px 28px;background:#F8F9FC;border-top:1px solid #D8DEF0;font-size:9px;color:#8E97B4;display:flex;justify-content:space-between;flex-shrink:0;}
+
+/* KPI */
+.kpis{display:grid;gap:9px;margin-bottom:12px;}
+.kpi{background:#F8F9FC;border:1px solid #D8DEF0;border-radius:8px;padding:11px 14px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi.b::before{background:#1B4FBE;}.kpi.g::before{background:#00C896;}.kpi.r::before{background:#E8294A;}.kpi.a::before{background:#F5A623;}
+.kl{font-size:10px;color:#8E97B4;font-weight:500;margin-bottom:2px;}
+.kv{font-size:20px;font-weight:700;color:#0F2044;line-height:1;}
+.ks{font-size:10px;color:#8E97B4;margin-top:2px;}
+.kb{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;}
+.kb.up{background:rgba(0,200,150,.12);color:#007A5A;}
+.kb.dn{background:rgba(232,41,74,.1);color:#B0001E;}
+.kb.wa{background:rgba(245,166,35,.15);color:#8A5500;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.tbl th{background:#0F2044;color:#fff;padding:7px 10px;text-align:left;font-size:10px;font-weight:600;}
+.tbl th:not(:first-child){text-align:center;}
+.tbl td{padding:6px 10px;border-bottom:1px solid #D8DEF0;}
+.tbl td:not(:first-child){text-align:center;}
+.tbl tr:hover td{background:#F8F9FC;}
+.cu{color:#00C896;font-weight:700;}.cr{color:#E8294A;font-weight:700;}.ca{color:#F5A623;font-weight:600;}.cb{color:#1B4FBE;font-weight:700;}
+
+/* INSIGHT */
+.ib{border-radius:8px;padding:9px 12px;font-size:11px;line-height:1.55;display:flex;gap:7px;align-items:flex-start;}
+.ib.g{background:rgba(0,200,150,.08);border:1px solid rgba(0,200,150,.2);color:#005A40;}
+.ib.b{background:rgba(27,79,190,.07);border:1px solid rgba(27,79,190,.18);color:#1A2F7A;}
+.ib.r{background:rgba(232,41,74,.07);border:1px solid rgba(232,41,74,.18);color:#8B001E;}
+.ib.a{background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.25);color:#7A5000;}
+.ii{flex-shrink:0;font-size:14px;margin-top:1px;}
+
+/* FUNNEL BAR */
+.fb{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.fb-l{font-size:10px;color:#8E97B4;width:110px;flex-shrink:0;}
+.fb-w{flex:1;height:18px;background:#EEF1F8;border-radius:3px;overflow:hidden;}
+.fb-b{height:100%;display:flex;align-items:center;padding:0 7px;border-radius:3px;}
+.fb-b span{font-size:9px;font-weight:700;color:#fff;white-space:nowrap;}
+.fb-v{font-size:10px;font-weight:700;width:40px;text-align:right;}
+
+/* ACTION */
+.acg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.ac{background:#F8F9FC;border:1px solid #D8DEF0;border-radius:8px;padding:11px 13px;display:flex;flex-direction:column;gap:4px;}
+.ac.hi{background:#0F2044;border-color:#0F2044;}
+.ac-n{font-size:9px;font-weight:700;color:#1B4FBE;}
+.ac.hi .ac-n{color:rgba(255,255,255,.4);}
+.ac-t{font-size:11px;font-weight:700;color:#0F2044;line-height:1.3;}
+.ac.hi .ac-t{color:#fff;}
+.ac-d{font-size:10px;color:#8E97B4;line-height:1.45;}
+.ac.hi .ac-d{color:rgba(255,255,255,.55);}
+.aw{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;align-self:flex-start;}
+.aw-p{background:rgba(245,166,35,.15);color:#8A5500;}
+.aw-b{background:rgba(27,79,190,.1);color:#1B4FBE;}
+.aw-a{background:rgba(0,200,150,.1);color:#007A5A;}
+.flags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.flag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.flag.g{background:rgba(0,200,150,.1);color:#007A5A;}
+.flag.a{background:rgba(245,166,35,.12);color:#8A5500;}
+.flag.r{background:rgba(232,41,74,.1);color:#B0001E;}
+
+/* COVER */
+#s0{background:#0F2044;}
+.cv{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:540px;}
+.cvl{padding:40px 44px;display:flex;flex-direction:column;justify-content:center;gap:14px;}
+.cvey{font-size:10px;color:#00C896;letter-spacing:.15em;text-transform:uppercase;font-family:monospace;}
+.cvtt{font-size:40px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.02em;}
+.cvtt span{color:#00C896;}
+.cvds{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;}
+.cvmeta{display:flex;gap:20px;flex-wrap:wrap;}
+.cvm .ml{font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase;font-family:monospace;}
+.cvm .mv{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px;}
+.cvr{padding:40px 36px;background:rgba(255,255,255,.03);border-left:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;justify-content:center;gap:10px;}
+.cvk{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 17px;}
+.cvkl{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;font-family:monospace;}
+.cvkv{font-size:24px;font-weight:800;color:#fff;margin:3px 0 2px;}
+.cvkc{font-size:11px;font-weight:600;}
+
+/* ── S9/S10 추가 슬라이드 공통 ── */
+.sec-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;color:#8E97B4;text-transform:uppercase;margin-bottom:6px;}
+.metric-row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.kpi-sm{background:#F8F9FC;border:1px solid #D8DEF0;border-radius:8px;padding:10px 12px;position:relative;overflow:hidden;}
+.kpi-sm::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi-sm.b::before{background:#1B4FBE;}.kpi-sm.g::before{background:#00C896;}.kpi-sm.r::before{background:#E8294A;}.kpi-sm.a::before{background:#F5A623;}
+.kpi-sm .kl{font-size:9px;color:#8E97B4;font-weight:500;margin-bottom:2px;}
+.kpi-sm .kv{font-size:17px;font-weight:700;color:#0F2044;line-height:1;}
+.kpi-sm .ks{font-size:9px;color:#8E97B4;margin-top:2px;}
+.bar-w{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.bar-lbl{font-size:10px;color:#8E97B4;width:76px;flex-shrink:0;}
+.bar-bg{flex:1;height:7px;background:#EEF1F8;border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;}
+.bar-val{font-size:10px;font-weight:700;width:44px;text-align:right;}
+.pri-hd{display:grid;grid-template-columns:1fr 60px 80px;gap:8px;font-size:9px;color:#8E97B4;letter-spacing:.08em;text-transform:uppercase;padding:0 6px;margin-bottom:3px;}
+.pri-row{display:grid;grid-template-columns:1fr 60px 80px;gap:8px;align-items:center;padding:5px 6px;border-radius:6px;}
+.pri-row:nth-child(even){background:#F8F9FC;}
+.pri-name{font-size:11px;color:#0F2044;display:flex;align-items:center;gap:5px;}
+.dots5{display:flex;gap:2px;}
+.dot5{width:7px;height:7px;border-radius:50%;}
+.pri-when{font-size:10px;color:#8E97B4;}
+.set-card2{background:#F8F9FC;border:1px solid #D8DEF0;border-radius:10px;padding:13px 15px;display:flex;flex-direction:column;gap:7px;}
+.set-card2.hi{background:#EBF1FD;border:2px solid #1B4FBE;}
+.set-ttl{font-size:12px;font-weight:700;color:#0F2044;}
+.set-sub{font-size:10px;color:#8E97B4;margin-top:1px;}
+.set-item{display:flex;align-items:center;gap:6px;font-size:10px;color:#4A5278;}
+.set-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.set-price{font-size:13px;font-weight:700;color:#1B4FBE;}
+.set-save{font-size:10px;color:#007A5A;}
+.set-rationale{font-size:10px;color:#8E97B4;line-height:1.5;border-left:2px solid #D8DEF0;padding-left:8px;border-radius:0;}
+.principle-row{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:#4A5278;padding:5px 0;border-bottom:1px solid #EEF1F8;}
+.principle-row:last-child{border-bottom:none;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand"><b>솔솔푸른솔</b> × 오늘의집 TOPS 미팅 · 2026.06.03<span class="badge">INTERNAL</span></div>
+  <div class="nav-r">
+    <div class="nav-dots" id="dots"></div>
+    <button class="nbtn" onclick="go(-1)">&#8592;</button>
+    <span class="nctr" id="ctr">1 / 12</span>
+    <button class="nbtn" onclick="go(1)">&#8594;</button>
+    <button class="dl" onclick="dlHTML()">&#8595; HTML 저장</button>
+  </div>
+</nav>
+
+<div class="wrap" id="wrap">
+
+<!-- S0: COVER -->
+<div class="slide on" id="s0">
+  <div class="cv">
+    <div class="cvl">
+      <div class="cvey">TOPS MEETING · INTERNAL · brand_id 61498</div>
+      <div class="cvtt">솔솔<br><span>푸른솔</span><br>미팅 자료</div>
+      <div class="cvds">26년 상반기 실적 분석 및 하반기 F/W 대응 전략<br>오늘의집 인바운드 MD팀 · 비니</div>
+      <div class="cvmeta">
+        <div class="cvm"><div class="ml">Brand ID</div><div class="mv">61498</div></div>
+        <div class="cvm"><div class="ml">Shop ID</div><div class="mv">24636553</div></div>
+        <div class="cvm"><div class="ml">주력 카테</div><div class="mv">그릇/접시/홈세트</div></div>
+        <div class="cvm"><div class="ml">분석 기간</div><div class="mv">25.04 – 26.05</div></div>
+      </div>
+    </div>
+    <div class="cvr">
+      <div class="cvk"><div class="cvkl">순거래액 YoY</div><div class="cvkv">+18,163%</div><div class="cvkc" style="color:#00C896;">▲ 92만 → 1억6,813만원</div></div>
+      <div class="cvk"><div class="cvkl">주문건수 YoY</div><div class="cvkv">+5,442%</div><div class="cvkc" style="color:#00C896;">▲ 45건 → 2,494건</div></div>
+      <div class="cvk"><div class="cvkl">취소율 변화</div><div class="cvkv">-14.0%p</div><div class="cvkc" style="color:#E8294A;">▲ 4.1% → 18.1% (악화 주의)</div></div>
+      <div class="cvk"><div class="cvkl">26H1 최고월</div><div class="cvkv">4,792만</div><div class="cvkc" style="color:#00C896;">26.01 · 826건 주문</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S1: YoY -->
+<div class="slide" id="s1" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">01 · YoY 성장률</div><div class="st">26년 상반기 핵심 지표 — <em>폭발적 신규 성장</em></div><div class="ssub">25H1(25.01~05) vs 26H1(26.01~05) · shop_id=24636553</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="kpis" style="grid-template-columns:1fr 1fr;">
+        <div class="kpi b"><div class="kl">순거래액 (26H1)</div><div class="kv">1억6,813만</div><div class="ks">25H1: 92만원</div><div class="kb up">▲ +18,163%</div></div>
+        <div class="kpi b"><div class="kl">주문건수</div><div class="kv">2,494건</div><div class="ks">25H1: 45건</div><div class="kb up">▲ +5,442%</div></div>
+        <div class="kpi r"><div class="kl">취소율 (26H1)</div><div class="kv">18.1%</div><div class="ks">25H1: 4.1%</div><div class="kb dn">▲ +14.0%p 악화</div></div>
+        <div class="kpi b"><div class="kl">PDP 조회</div><div class="kv">163,639</div><div class="ks">25H1: 10,588건</div><div class="kb up">▲ +1,446%</div></div>
+      </div>
+      <div class="ib g"><span class="ii">🚀</span><div><strong>25년 4월 입점 후 불과 1년 만에 1억6천만원 채널.</strong> 25.09 피크(6.8억) 이후 조정 중이나 26년 다시 반등 구조 확인됨.</div></div>
+      <div class="ib r"><span class="ii">⚠️</span><div><strong>취소율이 4.1% → 18.1%로 급등.</strong> 성장 규모 대비 취소 관리가 핵심 과제. 상품별 취소 사유 파악 시급.</div></div>
+    </div>
+    <div>
+      <table class="tbl">
+        <thead><tr><th>지표</th><th>25H1</th><th>26H1</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>순거래액</td><td>921,000원</td><td>168,134,000원</td><td class="cu">▲+18,163%</td></tr>
+          <tr><td>결제거래액</td><td>7,542,000원</td><td>166,170,600원</td><td class="cu">▲+2,103%</td></tr>
+          <tr><td>취소율</td><td>4.1%</td><td>18.1%</td><td class="cr">▲+14.0%p</td></tr>
+          <tr><td>주문건수</td><td>45건</td><td>2,494건</td><td class="cu">▲+5,442%</td></tr>
+          <tr><td>노출수</td><td>240,390</td><td>6,362,148</td><td class="cu">▲+2,547%</td></tr>
+          <tr><td>PDP 조회</td><td>10,588건</td><td>163,639건</td><td class="cu">▲+1,446%</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:8px;" class="ib a"><span class="ii">💡</span><div>25H1은 4월 입점 초기라 베이스가 낮음. 성장률 수치보다 <strong>26년 절대 규모와 추이</strong>가 핵심 판단 기준.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform · period_base='month'</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S2: GMV 추이 -->
+<div class="slide" id="s2" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">02 · 거래액 추이</div><div class="st">월별 순거래액 추이 — <em>입점(25.04) 이후 전체</em></div><div class="ssub">comm_product_perform · shop_id=24636553 · 단위: 만원 / 우축: 취소율(%)</div></div>
+  <div class="srule"></div>
+  <div class="sbd">
+    <div style="display:flex;gap:14px;margin-bottom:8px;font-size:11px;color:#8E97B4;">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#1B4FBE;"></span>거래액</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#E8294A;"></span>취소율</span>
+    </div>
+    <canvas id="gmvC" height="280" style="width:100%;display:block;" role="img" aria-label="솔솔푸른솔 GMV 추이"></canvas>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;">
+      <div class="ib b"><span class="ii">📈</span><div><strong>25.09 피크 6,789만원.</strong> 추석 시즌 폭발 성장. 26.01 4,792만으로 재상승 중.</div></div>
+      <div class="ib r"><span class="ii">🚨</span><div><strong>26.05 취소율 24.1% 최고치.</strong> 거래액 재반등과 동시에 취소율도 급등 — 원인 즉시 파악 필요.</div></div>
+      <div class="ib a"><span class="ii">💡</span><div>추석(9월)·연말(11~12월) 시즌 반응 확인. F/W 26년 대비 선제 재고 준비 필요.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform · period_base='month'</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S3: PLP 퍼널 -->
+<div class="slide" id="s3" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">03 · PLP 퍼널</div><div class="st">지면별 노출 → 구매 전환 퍼널 <em>(25.12 – 26.05)</em></div><div class="ssub">comm_product_perform_att · CVR = PDP조회→구매</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1.1fr 1fr;gap:16px;">
+    <div>
+      <table class="tbl" style="font-size:10px;">
+        <thead><tr><th>지면</th><th>노출</th><th>PDP조회</th><th>구매</th><th>GMV</th><th>CVR</th></tr></thead>
+        <tbody>
+          <tr><td><b>검색(SRP매장)</b></td><td>1,033,383</td><td>33,057</td><td>429</td><td class="cb">2,661만</td><td>1.30%</td></tr>
+          <tr><td><b>브랜드페이지</b></td><td>557,920</td><td>28,801</td><td>438</td><td class="cb">2,285만</td><td>1.52%</td></tr>
+          <tr><td>기획전</td><td class="cr"><b>1,528,614</b></td><td>17,125</td><td>245</td><td>1,086만</td><td class="ca">1.43%</td></tr>
+          <tr><td>통합검색</td><td>80,850</td><td>4,453</td><td>79</td><td>638만</td><td class="cu">1.77%</td></tr>
+          <tr><td>PDP</td><td>355,943</td><td>13,335</td><td>108</td><td>613만</td><td>0.81%</td></tr>
+          <tr><td><b>장바구니</b></td><td>49,471</td><td>6,599</td><td>77</td><td>468만</td><td>1.17%</td></tr>
+          <tr><td><b>묶음배송</b></td><td>17,027</td><td>631</td><td>17</td><td>62만</td><td class="cu"><b>2.69%</b></td></tr>
+          <tr><td>스크랩</td><td>84,532</td><td>4,374</td><td>26</td><td>185만</td><td>0.59%</td></tr>
+          <tr><td>카테고리</td><td>432,686</td><td>10,330</td><td>20</td><td>84만</td><td class="cr">0.19%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:11px;font-weight:700;color:#0F2044;margin-bottom:3px;">CVR 순위 (PDP조회→구매)</div>
+      <div id="fBars"></div>
+      <div class="ib g"><span class="ii">🏆</span><div><strong>묶음배송 CVR 2.69% 1위.</strong> 그릇 세트 상품 특성상 함께 구매 수요 높음. 세트 구성 강화 시 레버리지 큼.</div></div>
+      <div class="ib a"><span class="ii">⚠️</span><div>기획전 152만 노출(최다)인데 CVR 1.43%로 준수하나 <strong>절대 노출 대비 전환 효율은 검색 대비 낮음.</strong> 참여 상품 품질 점검 필요.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform_att · yyyymm IN ('202512'~'202605')</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S4: 유입채널 -->
+<div class="slide" id="s4" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">04 · 유입채널</div><div class="st">Organic vs Paid 채널 구성 <em>(26.03 – 26.05)</em></div><div class="ssub">comm_product_perform_att · organic / paid / nonpaid 분리</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <table class="tbl">
+        <thead><tr><th>채널</th><th>노출</th><th>PDP조회</th><th>구매</th><th>GMV</th><th>비중</th></tr></thead>
+        <tbody>
+          <tr><td><b>Organic</b></td><td>2,179,702</td><td>48,563</td><td>511</td><td class="cb">2,680만</td><td class="cb"><b>77%</b></td></tr>
+          <tr><td><b>Paid</b></td><td>345,744</td><td>10,709</td><td>117</td><td>683만</td><td>20%</td></tr>
+          <tr><td><b>Nonpaid</b></td><td>158,672</td><td>4,546</td><td>26</td><td>142만</td><td>4%</td></tr>
+        </tbody>
+      </table>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div class="kpi b"><div class="kl">Organic CVR</div><div class="kv" style="font-size:16px;">1.05%</div><div class="ks">PDP→구매</div></div>
+        <div class="kpi a"><div class="kl">Paid CVR</div><div class="kv" style="font-size:16px;">1.09%</div><div class="ks">Organic과 유사</div></div>
+        <div class="kpi g"><div class="kl">Organic 비중</div><div class="kv" style="font-size:16px;">77%</div><div class="ks">자연유입 강점</div></div>
+      </div>
+      <div class="ib g"><span class="ii">✅</span><div><strong>Organic 77% — 검색 자연유입이 핵심.</strong> Paid CVR이 Organic과 비슷해 광고 투자 확대 시 효율적 GMV 확장 가능.</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="font-size:11px;font-weight:700;color:#0F2044;">GMV 채널 구성 (26.03~05)</div>
+      <canvas id="chPie" width="170" height="170" style="display:block;" role="img" aria-label="채널 구성"></canvas>
+      <div style="font-size:11px;color:#8E97B4;display:flex;flex-direction:column;gap:4px;width:100%;">
+        <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:2px;background:#1B4FBE;"></span>Organic 77% — 2,680만원</div>
+        <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:2px;background:#F5A623;"></span>Paid 20% — 683만원</div>
+        <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:2px;background:#D8DEF0;"></span>Nonpaid 4% — 142만원</div>
+      </div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform_att · yyyymm IN ('202603','202604','202605')</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S5: 가격대 -->
+<div class="slide" id="s5" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">05 · 가격대 분포</div><div class="st">카테고리별 판매중 상품 <em>가격대 분포</em></div><div class="ssub">prism_d_product_info_latest · status_v2_kr='판매중' · 98개 판매중</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div><canvas id="priceC" height="260" style="width:100%;display:block;" role="img" aria-label="가격대 분포"></canvas></div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <table class="tbl" style="font-size:10px;">
+        <thead><tr><th>카테고리</th><th>상품수</th><th>평균가</th><th>리뷰</th><th>가격대</th></tr></thead>
+        <tbody>
+          <tr><td>그릇/접시/홈세트</td><td class="cb">38개</td><td>19,755원</td><td class="cu">32건</td><td>1~3만원</td></tr>
+          <tr><td>그릇/접시/홈세트</td><td class="cb">31개</td><td>38,165원</td><td>14건</td><td>3~5만원</td></tr>
+          <tr><td>그릇/접시/홈세트</td><td>6개</td><td>118,000원</td><td>16건</td><td>10~20만원</td></tr>
+          <tr><td>그릇/접시/홈세트</td><td>4개</td><td>416,000원</td><td>27건</td><td class="ca">20만원+</td></tr>
+          <tr><td>컵/잔/텀블러</td><td>5개</td><td>15,400원</td><td>2건</td><td>1~3만원</td></tr>
+          <tr><td>수저/커트러리</td><td>5개</td><td>8,900원</td><td>10건</td><td>1만원 미만</td></tr>
+        </tbody>
+      </table>
+      <div class="ib b"><span class="ii">💡</span><div><strong>주력은 1~3만원대(38개) + 3~5만원대(31개).</strong> 합리적 가격대 그릇으로 포지셔닝. 리뷰 평균 32건으로 타 브랜드 대비 양호.</div></div>
+      <div class="ib a"><span class="ii">⚠️</span><div>20만원+ 고단가 4개는 리뷰 평균 27건. 가격 대비 전환 기반 강화 필요.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.prism_d_product_info_latest · brand_id=61498</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S6: 경쟁 브랜드 -->
+<div class="slide" id="s6" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">06 · 경쟁 브랜드</div><div class="st">그릇/접시/홈세트 카테고리 <em>경쟁 브랜드 GMV 추이</em></div><div class="ssub">commerce_gross_profit · 6개월 GMV 기준 상위 6개 브랜드 · 단위: 만원</div></div>
+  <div class="srule"></div>
+  <div class="sbd">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;font-size:11px;color:#8E97B4;" id="compLeg"></div>
+    <canvas id="compC" height="300" style="width:100%;display:block;" role="img" aria-label="경쟁 브랜드 추이"></canvas>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;">
+      <div class="ib r"><span class="ii">🏅</span><div><strong>시라쿠스가 압도적 1위.</strong> 월 2억~7억 규모. 솔솔푸른솔 대비 카테고리 내 격차 크나 성장률로 차별화.</div></div>
+      <div class="ib a"><span class="ii">⚠️</span><div><strong>타블도트·윤도자기 26년 급성장 중.</strong> 중저가 경쟁 심화 예상. 차별화된 디자인·소재 포지셔닝 필요.</div></div>
+      <div class="ib b"><span class="ii">💡</span><div>솔솔푸른솔의 <strong>리뷰 기반 검색 노출 강점</strong>을 활용한 유기적 성장 전략이 유효한 구간.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.commerce_gross_profit · cate_d2='그릇/접시/홈세트' · 25.01~26.05</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S7: 신상품 -->
+<div class="slide" id="s7" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">07 · 신상품 & 품절</div><div class="st">신상품 등록 추이 & <em>품절·재고 현황</em></div><div class="ssub">comm_product_perform · shop_id=24636553 · 25.06~26.05</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <canvas id="npC" height="220" style="width:100%;display:block;" role="img" aria-label="신상품 추이"></canvas>
+      <div class="ib g"><span class="ii">✅</span><div><strong>26년 1~5월 신상품 23개 등록.</strong> 25년에 비해 꾸준한 신상품 공급 유지 중. 다만 26.04~05 감소 추세 주의.</div></div>
+    </div>
+    <div>
+      <table class="tbl" style="font-size:10px;">
+        <thead><tr><th>월</th><th>신상품</th><th>판매중</th><th>품절</th><th>정지</th></tr></thead>
+        <tbody>
+          <tr><td>25.06</td><td class="cu">10</td><td>840</td><td>0</td><td>0</td></tr>
+          <tr><td>25.07</td><td class="cu">10</td><td>1,354</td><td>1</td><td>0</td></tr>
+          <tr><td>25.08</td><td class="cu" style="color:#00A878;"><b>23</b></td><td>1,755</td><td>10</td><td>1</td></tr>
+          <tr><td>25.09</td><td class="cu">9</td><td>2,280</td><td>10</td><td>0</td></tr>
+          <tr><td>25.10</td><td class="cr">0</td><td>2,370</td><td class="ca">47</td><td>0</td></tr>
+          <tr><td>25.11</td><td class="cr">0</td><td>2,293</td><td class="ca">47</td><td>0</td></tr>
+          <tr><td>25.12</td><td class="cr">0</td><td>2,317</td><td class="ca">99</td><td>0</td></tr>
+          <tr><td>26.01</td><td class="cu">9</td><td>2,521</td><td class="ca">45</td><td>0</td></tr>
+          <tr><td>26.02</td><td>1</td><td>2,422</td><td>34</td><td>0</td></tr>
+          <tr><td>26.03</td><td class="cu">7</td><td>2,757</td><td class="ca">84</td><td>0</td></tr>
+          <tr><td>26.04</td><td>5</td><td>2,739</td><td class="cr"><b>169</b></td><td>0</td></tr>
+          <tr><td>26.05</td><td>1</td><td>3,003</td><td class="cr"><b>133</b></td><td>0</td></tr>
+        </tbody>
+      </table>
+      <div class="ib r" style="margin-top:8px;"><span class="ii">🚨</span><div><strong>26.04~05 품절 169→133개 급증.</strong> 인기 상품 품절이 GMV 기회 손실로 이어질 수 있음. 재고 관리 개선 필요.</div></div>
+    </div>
+  </div>
+  <div class="sft"><span>ba_preserved.comm_product_perform · period_base='month'</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S8: 상품별 분석 -->
+<div class="slide" id="s8" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">08 · 상품별 분석</div><div class="st">단독 상품 & 상품별 GMV·취소율 분석</div><div class="ssub">commerce_gross_profit + comm_product_perform · 최근 6개월(25.12~26.05)</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;min-height:480px;">
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <!-- KPI 카드 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
+        <div class="kpi g"><div class="kl">단독 상품 수</div><div class="kv" style="font-size:18px;">14개</div><div class="ks">전체 98개 중</div></div>
+        <div class="kpi b"><div class="kl">단독 GMV (6개월)</div><div class="kv" style="font-size:18px;">895만</div><div class="ks">전체의 5.8%</div></div>
+        <div class="kpi a"><div class="kl">단독 평균 별점</div><div class="kv" style="font-size:18px;">★5.0</div><div class="ks">전 상품 만점</div></div>
+      </div>
+
+      <!-- 단독 계열별 월별 추이 -->
+      <div style="font-size:10px;color:#8E97B4;font-weight:500;text-transform:uppercase;letter-spacing:.06em;">단독 상품 계열별 GMV 추이 (26.01~05)</div>
+      <canvas id="exTrendC" height="140" style="width:100%;display:block;" role="img" aria-label="단독 상품 계열별 GMV 추이">크림베일 26.05 326만, 토브 신규 195만</canvas>
+      <div style="display:flex;gap:12px;font-size:10px;color:#8E97B4;">
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:2px;background:#1D9E75;"></span>크림베일 계열</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:2px;background:#1B4FBE;"></span>토브 계열 (신규)</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:2px;background:#F5A623;"></span>순수무광 단독</span>
+      </div>
+
+      <!-- 단독 상품 목록 -->
+      <div style="font-size:10px;color:#8E97B4;font-weight:500;text-transform:uppercase;letter-spacing:.06em;">단독 상품 GMV 순위</div>
+      <div id="exProdList" style="overflow-y:auto;max-height:160px;"></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <!-- TOP 10 GMV -->
+      <div style="font-size:10px;color:#8E97B4;font-weight:500;text-transform:uppercase;letter-spacing:.06em;">상품별 GMV TOP 10 (25.12~26.05)</div>
+      <div id="top10ProdList"></div>
+
+      <!-- 취소율 높은 상품 -->
+      <div style="font-size:10px;color:#8E97B4;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">취소율 경고 상품 (관리 필요)</div>
+      <div id="cancelHighList"></div>
+
+      <div class="ib" style="background:rgba(232,41,74,.07);border:1px solid rgba(232,41,74,.18);color:#8B001E;">
+        <span style="font-size:14px;flex-shrink:0;">🚨</span>
+        <div>단독 상품(토브 라인볼 43%·크림베일 오목굽찬기 40%) 취소율 과다. 취소 사유 즉시 파악 요청 필요.</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="sft"><span>ba_preserved.commerce_gross_profit + comm_product_perform · brand_id=61498</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S9: 개선 기회 -->
+<div class="slide" id="s9" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">09 · 개선 기회</div><div class="st">6가지 개선 영역 — <em>데이터 기반 우선순위</em></div><div class="ssub">취소율·품절·리뷰·퍼널·단독·광고 종합 분석 · 25.12~26.05</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <!-- 리뷰 구간별 취소율 -->
+      <div class="sec-lbl">리뷰 수 → 취소율 관계 (실제 데이터)</div>
+      <div class="bar-w"><div class="bar-lbl">리뷰 없음</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:#E8294A;"></div></div><div class="bar-val" style="color:#E8294A;">취소 29%</div></div>
+      <div class="bar-w"><div class="bar-lbl">1~4건</div><div class="bar-bg"><div class="bar-fill" style="width:97%;background:#F5A623;"></div></div><div class="bar-val" style="color:#F5A623;">취소 31%</div></div>
+      <div class="bar-w"><div class="bar-lbl">5~9건</div><div class="bar-bg"><div class="bar-fill" style="width:60%;background:#F5A623;"></div></div><div class="bar-val" style="color:#F5A623;">취소 19%</div></div>
+      <div class="bar-w"><div class="bar-lbl">10~19건</div><div class="bar-bg"><div class="bar-fill" style="width:54%;background:#00C896;"></div></div><div class="bar-val" style="color:#007A5A;">취소 17%</div></div>
+      <div class="bar-w"><div class="bar-lbl">20~49건</div><div class="bar-bg"><div class="bar-fill" style="width:63%;background:#00C896;"></div></div><div class="bar-val" style="color:#007A5A;">취소 20%</div></div>
+      <div class="bar-w"><div class="bar-lbl">50건 이상</div><div class="bar-bg"><div class="bar-fill" style="width:44%;background:#1B4FBE;"></div></div><div class="bar-val" style="color:#1B4FBE;">취소 14%</div></div>
+      <div class="ib g"><span class="ii">💡</span><div><strong>리뷰 10건 넘으면 취소율 절반으로 하락.</strong> 단독 14개 전 상품 ★5.0인데 리뷰 없어서 GMV 5.8% 그침. 리뷰 유도가 최우선.</div></div>
+
+      <!-- 퍼널 추이 -->
+      <div class="sec-lbl" style="margin-top:4px;">노출→클릭 유입률 추이 (imp→PDP %)</div>
+      <canvas id="funnelTrendC" height="100" style="width:100%;display:block;" role="img" aria-label="노출→PDP 유입률 월별 추이">퍼널 추이 차트</canvas>
+      <div class="ib r"><span class="ii">⚠️</span><div>26.05 유입률 1.70% — 26.03 3.46% 대비 절반. <strong>썸네일·상품명 키워드 개선</strong>으로 CTR 회복 필요.</div></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="sec-lbl">개선 우선순위 매트릭스</div>
+      <div class="pri-hd"><span>개선 과제</span><span>임팩트</span><span>시기</span></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#E8294A;flex-shrink:0;display:inline-block;"></span>취소율 높은 SKU 상세페이지 수정</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div></div><div class="pri-when">즉시 (1~2주)</div></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#E8294A;flex-shrink:0;display:inline-block;"></span>품절 상위 SKU 재고 보충</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div></div><div class="pri-when">즉시 (6월말)</div></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#F5A623;flex-shrink:0;display:inline-block;"></span>단독 상품 리뷰 유도 캠페인</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#D8DEF0;"></div></div><div class="pri-when">7월 (4주)</div></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#F5A623;flex-shrink:0;display:inline-block;"></span>크림베일 2인 세트 출시</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#D8DEF0;"></div><div class="dot5" style="background:#D8DEF0;"></div></div><div class="pri-when">7월</div></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#F5A623;flex-shrink:0;display:inline-block;"></span>썸네일 이미지 개선 (CTR 회복)</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#D8DEF0;"></div><div class="dot5" style="background:#D8DEF0;"></div></div><div class="pri-when">7월</div></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#1B4FBE;flex-shrink:0;display:inline-block;"></span>F/W 신상품 소싱 (추석 대비)</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#D8DEF0;"></div></div><div class="pri-when">7월말</div></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#1B4FBE;flex-shrink:0;display:inline-block;"></span>추석 전 Paid 광고 확대</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#D8DEF0;"></div><div class="dot5" style="background:#D8DEF0;"></div></div><div class="pri-when">8월</div></div>
+      <div class="pri-row"><div class="pri-name"><span style="width:6px;height:6px;border-radius:50%;background:#1B4FBE;flex-shrink:0;display:inline-block;"></span>토브 추가 라인 · 단독 확장</div><div class="dots5"><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#E8294A;"></div><div class="dot5" style="background:#D8DEF0;"></div></div><div class="pri-when">8~9월</div></div>
+      <div class="ib b" style="margin-top:4px;"><span class="ii">🎯</span><div><strong>취소율·품절 2가지만 잡으면</strong> 올해 추석에 작년 피크(6,789만) 넘길 수 있는 구조.</div></div>
+    </div>
+
+  </div>
+  <div class="sft"><span>리뷰 구간별: comm_product_perform + comm_product_perform_att | 퍼널: comm_product_perform_att</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S10: 세트 구성 제안 -->
+<div class="slide" id="s10" style="position:relative;">
+  <div class="lbar"></div>
+  <div class="shd"><div class="stag">10 · 세트 구성 제안</div><div class="st">묶음배송 CVR 2.69% — <em>데이터 기반 4가지 세트 제안</em></div><div class="ssub">묶음배송 지면 CVR 전 지면 1위 · Family set A 이미 2,616만 검증 완료</div></div>
+  <div class="srule"></div>
+  <div class="sbd" style="display:flex;flex-direction:column;gap:12px;">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="set-card2 hi">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div><div class="set-ttl">크림베일 밥상 2인 세트</div><div class="set-sub">즉시 출시 가능 · 전 상품 오늘의집 단독</div></div>
+          <div style="font-size:9px;padding:2px 7px;border-radius:10px;background:#EBF1FD;color:#1A2F7A;font-weight:700;white-space:nowrap;">1순위</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div class="set-item"><div class="set-dot" style="background:#00C896;"></div>크림베일 오목공기, 대접 × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">12,600×2</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#00C896;"></div>크림베일 도토리공기, 국대접 × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">12,600×2</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#00C896;"></div>크림베일 오목찬기 L × 4<span style="margin-left:auto;font-size:9px;color:#8E97B4;">12,600×4</span></div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <div class="set-price">98,400원 → 85,000원</div>
+          <div class="set-save">약 14% 할인</div>
+        </div>
+        <div class="set-rationale">크림베일 26.05 GMV 326만 (+267% MoM). 이미 낱개 구매 패턴 확인. 취소율 안정(25~28%). 단독 배지 효과로 검색 차별화.</div>
+      </div>
+
+      <div class="set-card2">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div><div class="set-ttl">순수무광 입문 세트 (1인)</div><div class="set-sub">판매 검증 완료 · 리뷰 478건 조합</div></div>
+          <div style="font-size:9px;padding:2px 7px;border-radius:10px;background:#EAF3DE;color:#27500A;font-weight:700;white-space:nowrap;">2순위</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div class="set-item"><div class="set-dot" style="background:#8E97B4;"></div>순수무광 담김찬기 × 1<span style="margin-left:auto;font-size:9px;color:#8E97B4;">24,000 · ★243건</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#8E97B4;"></div>순수무광 오목공기, 국대접 × 1<span style="margin-left:auto;font-size:9px;color:#8E97B4;">18,000 · ★150건</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#8E97B4;"></div>순수무광 오목찬기 S,M,L × 1<span style="margin-left:auto;font-size:9px;color:#8E97B4;">14,000 · ★85건</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#8E97B4;"></div>순수무광 오목종지 × 1<span style="margin-left:auto;font-size:9px;color:#8E97B4;">9,000 · ★54건</span></div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <div class="set-price">65,000원 → 55,000원</div>
+          <div class="set-save">약 15% 할인</div>
+        </div>
+        <div class="set-rationale">리뷰 최다 상품 조합. 취소율 8~15% 안정. 신규 고객 첫 구매 유도 및 묶음배송 지면 CVR 노출에 최적.</div>
+      </div>
+
+      <div class="set-card2">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div><div class="set-ttl">토브 시리즈 한상 세트</div><div class="set-sub">신규 론칭 · 취소율 해결 후 출시 권장</div></div>
+          <div style="font-size:9px;padding:2px 7px;border-radius:10px;background:#FEF3C7;color:#8A5500;font-weight:700;white-space:nowrap;">조건부</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div class="set-item"><div class="set-dot" style="background:#1B4FBE;"></div>토브 링플레이트 M × 1<span style="margin-left:auto;font-size:9px;color:#8E97B4;">16,000</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#1B4FBE;"></div>토브 브이평찬기 × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">14,000×2</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#1B4FBE;"></div>토브 베이직접시 × 1<span style="margin-left:auto;font-size:9px;color:#8E97B4;">24,000</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#D8DEF0;"></div>순수무광 수저받침 × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">6,000×2</span></div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <div class="set-price">80,000원 → 69,000원</div>
+          <div class="set-save">약 14% 할인</div>
+        </div>
+        <div class="set-rationale">토브 5월 첫 달 195만원. 라인볼 취소율 42.7% 해결 후 → 취소율 20% 이하 확인 → 출시 권장.</div>
+      </div>
+
+      <div class="set-card2">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div><div class="set-ttl">크림베일 × 순수무광 믹스</div><div class="set-sub">크로스셀 · 두 라인 교차 구매 유도</div></div>
+          <div style="font-size:9px;padding:2px 7px;border-radius:10px;background:#EEF1F8;color:#4A5278;font-weight:700;white-space:nowrap;">기획 필요</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div class="set-item"><div class="set-dot" style="background:#00C896;"></div>크림베일 오목공기, 대접 × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">12,600×2</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#00C896;"></div>크림베일 둥찬기 M × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">18,900×2 · CVR 28.6%</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#8E97B4;"></div>순수무광 오목찬기 L × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">14,000×2</span></div>
+          <div class="set-item"><div class="set-dot" style="background:#8E97B4;"></div>순수무광 수저받침 × 2<span style="margin-left:auto;font-size:9px;color:#8E97B4;">6,000×2</span></div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <div class="set-price">116,000원 → 99,000원</div>
+          <div class="set-save">약 15% 할인</div>
+        </div>
+        <div class="set-rationale">묶음배송 크림베일 둥찬기 CVR 28.6% 확인. 크림베일 팬이 순수무광도 경험하게 하는 크로스셀 효과.</div>
+      </div>
+    </div>
+
+    <div style="background:#F8F9FC;border-radius:10px;padding:12px 14px;">
+      <div class="sec-lbl">세트 구성 공통 원칙</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        <div class="principle-row"><span style="color:#1B4FBE;font-size:12px;font-weight:700;flex-shrink:0;">→</span><div>할인율 10~15% — 이상은 마진 훼손, 이하는 유인 부족</div></div>
+        <div class="principle-row"><span style="color:#1B4FBE;font-size:12px;font-weight:700;flex-shrink:0;">→</span><div>상품명에 "몇 인용 / 몇 pcs" 명시 — Family set A 리뷰 63건의 비결</div></div>
+        <div class="principle-row"><span style="color:#1B4FBE;font-size:12px;font-weight:700;flex-shrink:0;">→</span><div>세트 상세페이지에 구성품 실제 사진 + 크기 비교 필수</div></div>
+        <div class="principle-row" style="border-bottom:none;"><span style="color:#1B4FBE;font-size:12px;font-weight:700;flex-shrink:0;">→</span><div>취소율 높은 SKU 먼저 해결 후 세트 투입 (세트 취소율 전파 방지)</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sft"><span>묶음배송 지면 데이터: comm_product_perform_att · page_d1='GROUPABLE' | 세트 현황: comm_product_perform</span><span>INTERNAL · 2026-06-03</span></div>
+</div>
+
+<!-- S11: 액션 플랜 -->
+<div class="slide" id="s11" style="position:relative;background:#0F2044;">
+  <div class="shd" style="padding:24px 28px 0;"><div class="stag" style="color:#00C896;">11 · 인사이트 & 하반기 액션</div><div class="st" style="color:#fff;font-size:20px;">진단 플래그 & <em style="color:#00C896;">F/W 시즌 대비 액션 플랜</em></div><div class="ssub" style="color:rgba(255,255,255,.4);">분석 기준 2026-06-03 · 오늘의집 IB팀 · 비니 MD</div></div>
+  <div style="height:2px;background:linear-gradient(90deg,#1B4FBE,#00C896);margin:10px 28px;"></div>
+  <div class="sbd" style="padding:0 28px 14px;">
+    <div class="flags">
+      <div class="flag g">🟢 YoY 폭발적 성장 (+18,163%)</div>
+      <div class="flag r">🔴 취소율 18.1% (26.05 24.1%)</div>
+      <div class="flag g">🟢 Organic 77% 자연유입</div>
+      <div class="flag r">🔴 품절 169개 (26.04 기준)</div>
+      <div class="flag g">🟢 묶음배송 CVR 2.69% 특이점</div>
+      <div class="flag a">🟡 신상품 26년 23개 (5개월)</div>
+    </div>
+    <div class="acg">
+      <div class="ac"><div class="ac-n">ACTION 01 · 즉시</div><div class="ac-t">취소율 급등 원인 파악</div><div class="ac-d">26.05 취소율 24.1% — 상위 SKU 취소 사유 공유 요청. 배송·품질·사이즈 오인 여부 확인.</div><div class="aw aw-p">파트너 → 차주</div></div>
+      <div class="ac"><div class="ac-n">ACTION 02 · 즉시</div><div class="ac-t">품절 상품 재고 보충 계획</div><div class="ac-d">26.04 169개·26.05 133개 품절. 인기 SKU 우선 재입고 일정 공유 요청.</div><div class="aw aw-p">파트너 → 차주</div></div>
+      <div class="ac"><div class="ac-n">ACTION 03 · 7월</div><div class="ac-t">묶음배송 세트 상품 강화</div><div class="ac-d">CVR 2.69% 최고. 그릇+수저 세트 등 함께 구매 수요 높은 조합 기획.</div><div class="aw aw-b">MD + 파트너 → 7월</div></div>
+      <div class="ac"><div class="ac-n">ACTION 04 · 7월</div><div class="ac-t">F/W 추동 신상품 소싱 확인</div><div class="ac-d">추석(9월) 시즌 25.09 피크 재현 위해 8월 말 신상품 론칭 목표. SKU 리스트 요청.</div><div class="aw aw-p">파트너 → 7월말</div></div>
+      <div class="ac"><div class="ac-n">ACTION 05 · 8월</div><div class="ac-t">Paid 광고 확대 검토</div><div class="ac-d">Paid CVR 1.09%로 Organic과 유사. 광고 투자 확대 시 추석 피크 전 노출 확보 효과적.</div><div class="aw aw-a">MD + 파트너 → 8월</div></div>
+      <div class="ac hi"><div class="ac-n">핵심 메시지</div><div class="ac-t">취소율 잡고, 품절 채우고, 추석 준비하면 25.09 피크를 다시 찍을 수 있어요 🎯</div><div class="ac-d">3가지만 해결되면 하반기 월 5억 달성 가능한 성장 구조입니다.</div></div>
+    </div>
+  </div>
+  <div class="sft" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.07);color:rgba(255,255,255,.25);">
+    <span>오늘의집 IB팀 내부용 · 외부 배포 금지</span><span>INTERNAL · 2026-06-03 · PRISM/Athena</span>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+const SN=12;let CUR=0;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<SN;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);}
+function goTo(n){
+  if(n<0||n>=SN)return;
+  document.querySelectorAll('.slide').forEach((s,i)=>s.classList.toggle('on',i===n));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===n));
+  CUR=n;document.getElementById('ctr').textContent=`${n+1} / ${SN}`;
+  setTimeout(drawCharts,60);
+}
+function go(d){goTo(CUR+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+function dlHTML(){const b=new Blob([document.documentElement.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='솔솔푸른솔_TOPS미팅_20260603.html';a.click();}
+
+// ── 순수 Canvas 차트 ─────────────────────────────────
+const BLUE='#1B4FBE',ACC='#00C896',RED='#E8294A',AMB='#F5A623',GRAY='#D8DEF0';
+const COMP_COLS=['#1B4FBE','#00C896','#F5A623','#E8294A','#7F77DD','#888780'];
+
+const GMV_MONTHS=['25.04','25.05','25.06','25.07','25.08','25.09','25.10','25.11','25.12','26.01','26.02','26.03','26.04','26.05'];
+const GMV_VALS=[92,0,292,2729,3144,6789,4096,2264,805,4792,3408,3034,1486,4093];
+const CANCEL=[null,null,10.9,14.8,12.9,15.2,19.4,15.5,10.0,14.2,17.4,17.4,19.1,24.1];
+
+const COMP_BRANDS=['시라쿠스','쓰임','타블도트','윤도자기','코스타노바','니코트'];
+const COMP_DATA={
+  '시라쿠스':[4450,2989,3563,3175,3796,3059,2289,7019,3461,3039,3458,5315,2553,2386],
+  '쓰임':     [1391,758,671,756,958,796,685,939,821,771,676,574,469,500],
+  '타블도트': [778,564,632,685,837,770,668,851,906,902,1109,984,726,841],
+  '윤도자기': [452,297,274,338,574,740,539,954,1229,1233,1081,901,638,678],
+  '코스타노바':[809,540,735,520,762,638,639,798,965,790,822,736,551,426],
+  '니코트':   [389,334,328,275,321,295,237,315,275,308,344,273,265,280],
+};
+
+function drawBar(id,labels,vals,cancel){
+  const c=document.getElementById(id);if(!c)return;
+  const W=c.offsetWidth||900,H=c.height||280;c.width=W;c.height=H;
+  const ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);
+  const PAD={t:14,r:50,b:32,l:50};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+  const n=labels.length;const gap=CW/n;const bw=Math.max(4,gap*0.55);
+  const maxV=Math.max(...vals.filter(v=>v!=null))*1.1||100;
+  const maxC=Math.max(...(cancel||[]).filter(v=>v!=null))*1.2||30;
+  // 격자
+  for(let i=0;i<=4;i++){
+    const y=PAD.t+CH*(1-i/4);
+    ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle='#EEF1F8';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='#8E97B4';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(maxV*i/4)+'만',PAD.l-4,y+3);
+  }
+  // 막대
+  vals.forEach((v,i)=>{
+    if(!v)return;
+    const x=PAD.l+i*gap+(gap-bw)/2;const h=v/maxV*CH;
+    ctx.fillStyle=i>=9?BLUE:'rgba(27,79,190,0.22)';
+    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,PAD.t+CH-h,bw,h,3);ctx.fill();}
+    else ctx.fillRect(x,PAD.t+CH-h,bw,h);
+  });
+  // 취소율 라인
+  if(cancel){
+    ctx.strokeStyle=RED;ctx.lineWidth=1.8;ctx.beginPath();let first=true;
+    cancel.forEach((v,i)=>{
+      if(v==null)return;
+      const x=PAD.l+i*gap+gap/2;const y=PAD.t+CH*(1-v/maxC);
+      first?ctx.moveTo(x,y):ctx.lineTo(x,y);first=false;
+    });
+    ctx.stroke();
+    cancel.forEach((v,i)=>{
+      if(v==null)return;
+      const x=PAD.l+i*gap+gap/2;const y=PAD.t+CH*(1-v/maxC);
+      ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=RED;ctx.fill();
+    });
+    for(let i=0;i<=4;i++){
+      const y=PAD.t+CH*(1-i/4);
+      ctx.fillStyle=RED;ctx.font='9px monospace';ctx.textAlign='left';
+      ctx.fillText((maxC*i/4).toFixed(0)+'%',W-PAD.r+4,y+3);
+    }
+  }
+  // X축
+  labels.forEach((l,i)=>{
+    const x=PAD.l+i*gap+gap/2;
+    ctx.fillStyle='#8E97B4';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';
+    if(i%2===0||n<=10)ctx.fillText(l,x,PAD.t+CH+15);
+  });
+  ctx.beginPath();ctx.moveTo(PAD.l,PAD.t+CH);ctx.lineTo(PAD.l+CW,PAD.t+CH);ctx.strokeStyle='#D8DEF0';ctx.lineWidth=1;ctx.stroke();
+}
+
+function drawDonut(id,vals,colors){
+  const c=document.getElementById(id);if(!c)return;
+  c.width=170;c.height=170;
+  const ctx=c.getContext('2d');const cx=85,cy=85,r=62,ir=38;
+  const total=vals.reduce((a,b)=>a+b,0);let sa=-Math.PI/2;
+  vals.forEach((v,i)=>{const sw=v/total*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,sa,sa+sw);ctx.closePath();ctx.fillStyle=colors[i];ctx.fill();sa+=sw;});
+  ctx.beginPath();ctx.arc(cx,cy,ir,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+}
+
+function drawSimpleBar(id,labels,vals,getColor){
+  const c=document.getElementById(id);if(!c)return;
+  const W=c.offsetWidth||420,H=c.height||260;c.width=W;c.height=H;
+  const ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);
+  const PAD={t:10,r:10,b:28,l:40};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+  const n=labels.length;const gap=CW/n;const bw=Math.max(4,gap*0.6);
+  const maxV=Math.max(...vals)*1.15||10;
+  [0,.25,.5,.75,1].forEach(p=>{
+    const y=PAD.t+CH*(1-p);
+    ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle='#EEF1F8';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='#8E97B4';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='right';ctx.fillText(Math.round(maxV*p),PAD.l-4,y+3);
+  });
+  labels.forEach((l,i)=>{
+    const x=PAD.l+i*gap+(gap-bw)/2;const h=vals[i]/maxV*CH;
+    ctx.fillStyle=getColor?getColor(vals[i],i):'rgba(27,79,190,0.6)';
+    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,PAD.t+CH-h,bw,h,3);ctx.fill();}
+    else ctx.fillRect(x,PAD.t+CH-h,bw,h);
+    ctx.fillStyle='#8E97B4';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';
+    ctx.fillText(l,x+bw/2,PAD.t+CH+14);
+    if(vals[i]>0){ctx.fillStyle='#0F2044';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(vals[i],x+bw/2,PAD.t+CH-h-4);}
+  });
+  ctx.beginPath();ctx.moveTo(PAD.l,PAD.t+CH);ctx.lineTo(PAD.l+CW,PAD.t+CH);ctx.strokeStyle='#D8DEF0';ctx.lineWidth=1;ctx.stroke();
+}
+
+function drawLine(id,labels,seriesMap,colors){
+  const c=document.getElementById(id);if(!c)return;
+  const W=c.offsetWidth||900,H=c.height||300;c.width=W;c.height=H;
+  const ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);
+  const brands=Object.keys(seriesMap);
+  const maxV=Math.max(...brands.flatMap(b=>seriesMap[b]))*1.1;
+  const PAD={t:10,r:10,b:28,l:55};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+  const n=labels.length;const gap=CW/(n-1);
+  [0,.25,.5,.75,1].forEach(p=>{
+    const y=PAD.t+CH*(1-p);
+    ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle='#EEF1F8';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='#8E97B4';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='right';ctx.fillText(Math.round(maxV*p/100)+'억',PAD.l-4,y+3);
+  });
+  brands.forEach((b,bi)=>{
+    const vals=seriesMap[b];
+    ctx.strokeStyle=colors[bi];ctx.lineWidth=bi===0?2.5:1.5;
+    if(bi>0)ctx.setLineDash([4,3]);else ctx.setLineDash([]);
+    ctx.beginPath();
+    vals.forEach((v,i)=>{const x=PAD.l+i*gap;const y=PAD.t+CH*(1-v/maxV);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.stroke();ctx.setLineDash([]);
+    const lx=PAD.l+(vals.length-1)*gap;const ly=PAD.t+CH*(1-vals[vals.length-1]/maxV);
+    ctx.fillStyle=colors[bi];ctx.font='9px -apple-system,sans-serif';ctx.textAlign='left';ctx.fillText(b,lx+4,ly+3);
+  });
+  labels.forEach((l,i)=>{
+    if(i%2===0){const x=PAD.l+i*gap;ctx.fillStyle='#8E97B4';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(l.slice(2),x,PAD.t+CH+14);}
+  });
+  ctx.beginPath();ctx.moveTo(PAD.l,PAD.t+CH);ctx.lineTo(PAD.l+CW,PAD.t+CH);ctx.strokeStyle='#D8DEF0';ctx.lineWidth=1;ctx.stroke();
+}
+
+function drawCharts(){
+  // S2: GMV
+  if(CUR===1)drawBar('gmvC',GMV_MONTHS,GMV_VALS,CANCEL);
+  // S9: 퍼널 추이 꺾은선
+  if(CUR===8){
+    const ftC=document.getElementById('funnelTrendC');
+    if(ftC&&!ftC.dataset.done){
+      ftC.dataset.done='1';
+      const W=ftC.offsetWidth||500,H=ftC.height||100;ftC.width=W;ftC.height=H;
+      const ctx=ftC.getContext('2d');ctx.clearRect(0,0,W,H);
+      const fMonths=['25.09','25.10','25.11','25.12','26.01','26.02','26.03','26.04','26.05'];
+      const fVals=[2.19,3.25,2.92,3.33,2.59,3.16,3.46,3.64,1.70];
+      const maxV=4;
+      const PAD={t:8,r:10,b:22,l:36};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+      const n=fVals.length;const gap=CW/(n-1);
+      [0,.5,1].forEach(p=>{const y=PAD.t+CH*(1-p);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle='#EEF1F8';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='#8E97B4';ctx.font='8px -apple-system,sans-serif';ctx.textAlign='right';ctx.fillText((maxV*p).toFixed(1)+'%',PAD.l-3,y+3);});
+      ctx.strokeStyle=BLUE;ctx.lineWidth=2;ctx.beginPath();
+      fVals.forEach((v,i)=>{const x=PAD.l+i*gap;const y=PAD.t+CH*(1-v/maxV);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+      ctx.stroke();
+      fVals.forEach((v,i)=>{const x=PAD.l+i*gap;const y=PAD.t+CH*(1-v/maxV);const col=i===8?RED:i===6?ACC:BLUE;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();});
+      fMonths.forEach((m,i)=>{if(i%2===0){const x=PAD.l+i*gap;ctx.fillStyle='#8E97B4';ctx.font='8px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(m,x,PAD.t+CH+14);}});
+    }
+  }
+  // S8: 상품별 분석
+  if(CUR===7){
+    // 단독 계열 추이
+    const et=document.getElementById('exTrendC');
+    if(et&&!et.dataset.done){
+      et.dataset.done='1';
+      const W=et.offsetWidth||500,H=et.height||140;et.width=W;et.height=H;
+      const ctx=et.getContext('2d');ctx.clearRect(0,0,W,H);
+      const labels=['26.01','26.02','26.03','26.04','26.05'];
+      const series=[
+        {vals:[0,0,65,100,326],col:'#1D9E75'},
+        {vals:[0,0,0,0,195],col:'#1B4FBE',dash:[4,3]},
+        {vals:[28,41,32,3,52],col:'#F5A623',dash:[6,3]}
+      ];
+      const maxV=326*1.1;
+      const PAD={t:10,r:10,b:22,l:38};const CW=W-PAD.l-PAD.r;const CH=H-PAD.t-PAD.b;
+      [0,.5,1].forEach(p=>{const y=PAD.t+CH*(1-p);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.strokeStyle='#EEF1F8';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='#8E97B4';ctx.font='8px -apple-system,sans-serif';ctx.textAlign='right';ctx.fillText(Math.round(maxV*p)+'만',PAD.l-3,y+3);});
+      series.forEach(s=>{
+        ctx.strokeStyle=s.col;ctx.lineWidth=1.8;ctx.setLineDash(s.dash||[]);ctx.beginPath();
+        s.vals.forEach((v,i)=>{const x=PAD.l+i*(CW/4);const y=PAD.t+CH*(1-v/maxV);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+        ctx.stroke();ctx.setLineDash([]);
+        s.vals.forEach((v,i)=>{const x=PAD.l+i*(CW/4);const y=PAD.t+CH*(1-v/maxV);ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=s.col;ctx.fill();});
+      });
+      labels.forEach((l,i)=>{const x=PAD.l+i*(CW/4);ctx.fillStyle='#8E97B4';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(l,x,PAD.t+CH+14);});
+    }
+    // 단독 상품 목록
+    const ep=document.getElementById('exProdList');
+    if(ep&&!ep.dataset.done){
+      ep.dataset.done='1';
+      const exProds=[
+        {n:'크림베일 오목공기, 대접',g:267,r:13,ex:true},{n:'토브 링플레이트',g:186,r:25,ex:true},{n:'크림베일 도토리공기',g:167,r:6,ex:true},
+        {n:'크림베일 오목볼',g:151,r:3,ex:true},{n:'순수무광 사각마루',g:155,r:17,ex:true},{n:'토브 라인볼',g:85,r:18,ex:true},
+        {n:'토브 베이직접시',g:78,r:12,ex:true},{n:'토브 브이평찬기',g:76,r:15,ex:true},{n:'크림베일 둥찬기',g:73,r:7,ex:true},
+        {n:'토브 둥근볼',g:75,r:8,ex:true},{n:'크림베일 오목찬기 L',g:50,r:6,ex:true},{n:'크림베일 링타원접시',g:43,r:3,ex:true},
+        {n:'크림베일 오목굽찬기',g:32,r:5,ex:true},{n:'순수무광 오담볼',g:25,r:1,ex:true}
+      ];
+      const maxG=267;
+      exProds.forEach((p,i)=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid #EEF1F8;';
+        row.innerHTML=`<span style="font-size:10px;color:#8E97B4;width:16px;text-align:right;">${i+1}</span><div style="flex:1;min-width:0;"><span style="font-size:10px;color:#0F2044;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.n}</span><span style="font-size:9px;color:#8E97B4;">★${p.r}건</span></div><div style="width:60px;height:4px;background:#EEF1F8;border-radius:2px;overflow:hidden;flex-shrink:0;"><div style="width:${Math.round(p.g/maxG*100)}%;height:100%;background:#1D9E75;border-radius:2px;"></div></div><span style="font-size:10px;font-weight:500;color:#0F2044;white-space:nowrap;">${p.g}만</span>`;
+        ep.appendChild(row);
+      });
+    }
+    // TOP10 상품
+    const tp=document.getElementById('top10ProdList');
+    if(tp&&!tp.dataset.done){
+      tp.dataset.done='1';
+      const top10=[
+        {n:'순수무광 Family set A (4인 19pcs)',g:2616,r:63,ex:false},
+        {n:'순수무광 담김찬기',g:1108,r:243,ex:false},
+        {n:'순수무광 오목공기, 국대접',g:851,r:150,ex:false},
+        {n:'순수무광 면기 4종/3P+1P',g:631,r:50,ex:false},
+        {n:'순수무광 Couple set (2인 12pcs)',g:585,r:23,ex:false},
+        {n:'순수무광 한상세트 (1인 5pcs)',g:584,r:10,ex:false},
+        {n:'맑은유광 Couple set (2인 12pcs)',g:579,r:19,ex:false},
+        {n:'순수무광 오목찬기 S,M,L,XL',g:471,r:85,ex:false},
+        {n:'순수무광 양면굽접시',g:382,r:58,ex:false},
+        {n:'순수무광 오목면기',g:382,r:39,ex:false},
+      ];
+      const maxG=2616;
+      top10.forEach((p,i)=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid #EEF1F8;';
+        row.innerHTML=`<span style="font-size:10px;color:#8E97B4;width:14px;text-align:right;">${i+1}</span><div style="flex:1;min-width:0;"><span style="font-size:10px;color:#0F2044;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.n}</span><span style="font-size:9px;color:#8E97B4;">★${p.r}건</span></div><div style="width:70px;height:4px;background:#EEF1F8;border-radius:2px;overflow:hidden;flex-shrink:0;"><div style="width:${Math.round(p.g/maxG*100)}%;height:100%;background:#1B4FBE;border-radius:2px;"></div></div><span style="font-size:10px;font-weight:500;color:#0F2044;white-space:nowrap;">${p.g}만</span>`;
+        tp.appendChild(row);
+      });
+    }
+    // 취소율 높은 상품
+    const ch=document.getElementById('cancelHighList');
+    if(ch&&!ch.dataset.done){
+      ch.dataset.done='1';
+      const cancelH=[
+        {n:'Family set B (4인 20pcs)',r:60.0,ex:false},{n:'순수무광 티세트',r:44.1,ex:false},
+        {n:'토브 라인볼 S,M ★단독',r:42.7,ex:true},{n:'크림베일 오목굽찬기 ★단독',r:40.0,ex:true},
+        {n:'맑은유광 둥근면기',r:37.5,ex:false},{n:'순수무광 둥볼',r:36.0,ex:false},
+        {n:'크림베일 링타원접시 ★단독',r:30.4,ex:true},{n:'크림베일 오목찬기 ★단독',r:28.6,ex:true},
+      ];
+      cancelH.forEach(d=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;gap:7px;margin-bottom:4px;';
+        const col=d.r>40?'#E8294A':'#F5A623';
+        row.innerHTML=`<div style="flex:1;min-width:0;font-size:10px;color:#0F2044;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${d.n}</div><div style="width:90px;height:14px;background:#EEF1F8;border-radius:3px;overflow:hidden;flex-shrink:0;"><div style="width:${Math.round(d.r/60*100)}%;height:100%;background:${col};display:flex;align-items:center;padding:0 4px;"><span style="font-size:9px;font-weight:700;color:#fff;white-space:nowrap;">${d.r.toFixed(1)}%</span></div></div>`;
+        ch.appendChild(row);
+      });
+    }
+  }
+  // S3: 퍼널바
+  if(CUR===2){
+    const fbEl=document.getElementById('fBars');
+    if(fbEl&&!fbEl.dataset.done){
+      fbEl.dataset.done='1';
+      const plp=[
+        {l:'묶음배송',v:2.69,c:ACC},{l:'통합검색',v:1.77,c:BLUE},{l:'브랜드페이지',v:1.52,c:BLUE},
+        {l:'기획전',v:1.43,c:BLUE},{l:'쿠폰',v:1.47,c:BLUE},{l:'장바구니',v:1.17,c:BLUE},
+        {l:'검색(SRP)',v:1.30,c:'#2F6FEF'},{l:'PDP',v:0.81,c:AMB},
+        {l:'스크랩',v:0.59,c:AMB},{l:'쇼핑홈',v:0.40,c:AMB},{l:'카테고리',v:0.19,c:RED}
+      ];
+      const maxC=2.69;
+      plp.forEach(d=>{
+        const row=document.createElement('div');row.className='fb';
+        row.innerHTML=`<div class="fb-l">${d.l}</div><div class="fb-w"><div class="fb-b" style="width:${Math.round(d.v/maxC*100)}%;background:${d.c};"><span>${d.v.toFixed(2)}%</span></div></div><div class="fb-v" style="color:${d.c}">${d.v.toFixed(2)}%</div>`;
+        fbEl.appendChild(row);
+      });
+    }
+  }
+  // S4: 채널 도넛
+  if(CUR===3)drawDonut('chPie',[26804700,6832700,1423500],[BLUE,AMB,GRAY]);
+  // S5: 가격대
+  if(CUR===4){
+    drawSimpleBar('priceC',['1만미만','1~3만','3~5만','5~10만','10~20만','20만+'],[4,45,32,7,6,4],
+      (v,i)=>`rgba(27,79,190,${0.2+i*0.13})`);
+  }
+  // S6: 경쟁 브랜드
+  if(CUR===5){
+    drawLine('compC',GMV_MONTHS,COMP_DATA,COMP_COLS);
+    const legEl=document.getElementById('compLeg');
+    if(legEl&&!legEl.dataset.done){
+      legEl.dataset.done='1';
+      COMP_BRANDS.forEach((b,i)=>{
+        const s=document.createElement('span');s.style.cssText='display:flex;align-items:center;gap:4px;';
+        s.innerHTML=`<span style="width:10px;height:10px;border-radius:2px;background:${COMP_COLS[i]};"></span>${b}`;
+        legEl.appendChild(s);
+      });
+    }
+  }
+  // S7: 신상품
+  if(CUR===6){
+    const npM=['25.06','25.07','25.08','25.09','25.10','25.11','25.12','26.01','26.02','26.03','26.04','26.05'];
+    const npV=[10,10,23,9,0,0,0,9,1,7,5,1];
+    drawSimpleBar('npC',npM,npV,(v)=>v===0?'rgba(232,41,74,0.3)':v>=9?ACC:'rgba(27,79,190,0.5)');
+  }
+}
+setTimeout(drawCharts,100);
+window.addEventListener('resize',()=>setTimeout(drawCharts,100));
+</script>
+</body>
+</html>
