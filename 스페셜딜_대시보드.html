@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스페셜딜 실적 대시보드 | IB</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#3D5AFE;--pl:#EEF1FF;--g:#00C853;--w:#FF9800;--r:#F44336;--bg:#F4F6FA;--card:#fff;--t:#1A1D23;--ts:#6B7280;--bd:#E5E7EB;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t);font-size:13px;}
+
+.header{background:#fff;border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.header h1{font-size:15px;font-weight:700;}
+.header p{font-size:11px;color:var(--ts);margin-top:1px;}
+.header-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+select,input[type=date]{padding:5px 8px;border:1px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;background:#fff;outline:none;cursor:pointer;}
+select:focus,input:focus{border-color:var(--p);}
+.btn{padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-family:inherit;font-weight:600;transition:.15s;}
+.btn-p{background:var(--p);color:#fff;}.btn-p:hover{background:#2845E8;}
+.btn-g{background:#fff;border:1px solid var(--bd);color:var(--ts);}.btn-g:hover{border-color:var(--p);color:var(--p);}
+
+.tab-nav{background:#fff;border-bottom:2px solid var(--bd);padding:0 20px;display:flex;gap:0;position:sticky;top:57px;z-index:100;overflow-x:auto;}
+.tab{padding:10px 16px;font-size:12px;font-weight:600;color:var(--ts);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:.15s;}
+.tab:hover{color:var(--t);}
+.tab.active{color:var(--p);border-bottom-color:var(--p);}
+
+.container{padding:16px 20px;max-width:1700px;margin:0 auto;}
+.sec{display:none;}.sec.active{display:block;}
+.sec-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-title .badge{font-size:10px;background:var(--pl);color:var(--p);padding:2px 7px;border-radius:4px;font-weight:600;}
+.row{display:grid;gap:10px;margin-bottom:14px;}
+.r5{grid-template-columns:repeat(5,1fr);}
+.r4{grid-template-columns:repeat(4,1fr);}
+.r3{grid-template-columns:repeat(3,1fr);}
+.r2{grid-template-columns:2fr 1fr;}
+.r2e{grid-template-columns:1fr 1fr;}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;}
+.card h4{font-size:12px;font-weight:700;margin-bottom:10px;}
+.card p.sub{font-size:11px;color:var(--ts);margin-top:-8px;margin-bottom:10px;}
+
+/* KPI card */
+.kpi .kl{font-size:11px;color:var(--ts);font-weight:600;margin-bottom:4px;}
+.kpi .kv{font-size:21px;font-weight:700;line-height:1.2;}
+.kpi .ks{font-size:11px;color:var(--ts);margin-top:3px;}
+.kpi .kb{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:5px;}
+.ku{background:#E6FFF2;color:#00A344;}.kd{background:#FFF0F0;color:#D32F2F;}.km{background:var(--pl);color:var(--p);}
+.kpi.acc{border-top:3px solid var(--p);}
+.kpi.suc{border-top:3px solid var(--g);}
+.kpi.war{border-top:3px solid var(--w);}
+.kpi.dan{border-top:3px solid var(--r);}
+
+/* Table */
+.tcard{background:var(--card);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.thead2{padding:11px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.thead2 h4{font-size:13px;font-weight:700;}
+.tactions{display:flex;gap:8px;align-items:center;}
+table{width:100%;border-collapse:collapse;}
+th{padding:8px 10px;text-align:left;font-size:11px;font-weight:700;color:var(--ts);background:#F9FAFB;border-bottom:1px solid var(--bd);white-space:nowrap;cursor:pointer;user-select:none;}
+th:hover{color:var(--p);}
+th.r,td.r{text-align:right;}th.c,td.c{text-align:center;}
+tr{border-bottom:1px solid var(--bd);transition:background .1s;}tr:hover{background:#F9FAFB;}tr:last-child{border-bottom:none;}
+td{padding:9px 10px;font-size:12px;}
+.tfooter{font-size:11px;color:var(--ts);padding:7px 14px;border-top:1px solid var(--bd);}
+
+/* Misc */
+.ach-wrap{display:flex;align-items:center;gap:6px;}
+.bar-bg{flex:1;height:5px;border-radius:3px;background:var(--bd);overflow:hidden;min-width:44px;}
+.bar-fill{height:100%;border-radius:3px;}
+.ach-val{font-weight:700;min-width:36px;text-align:right;font-size:12px;}
+.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;color:#fff;}
+.sbadge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;}
+.sd{background:#E6FFF2;color:#00A344;}.sl{background:#FFF3E0;color:#E65100;}.su{background:var(--pl);color:var(--p);}.sw{background:#FFF0F0;color:#D32F2F;}
+.medal{font-size:16px;line-height:1;}
+.chart-h200{position:relative;height:200px;}
+.chart-h220{position:relative;height:220px;}
+.chart-h260{position:relative;height:260px;}
+.empty{padding:32px;text-align:center;color:var(--ts);}
+.search-inp{padding:5px 8px 5px 26px;border:1px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;outline:none;width:150px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 7px center;}
+.search-inp:focus{border-color:var(--p);}
+.tag-cat{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.legend-row{display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;}
+.forecast-bar{height:28px;border-radius:6px;display:flex;align-items:center;padding:0 8px;font-size:11px;font-weight:700;color:#fff;transition:width .4s;white-space:nowrap;overflow:hidden;}
+.fbar-wrap{background:var(--bd);border-radius:6px;overflow:hidden;margin-top:4px;}
+.md-compare-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.md-compare-name{width:40px;font-size:12px;font-weight:600;flex-shrink:0;}
+@media(max-width:1200px){.r5{grid-template-columns:repeat(3,1fr);}.r4{grid-template-columns:repeat(2,1fr);}.r2{grid-template-columns:1fr;}}
+@media(max-width:768px){.r5,.r4,.r3,.r2,.r2e{grid-template-columns:1fr;}.container{padding:10px 12px;}.header{flex-direction:column;gap:8px;align-items:flex-start;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div>
+    <h1>스페셜딜 실적 대시보드</h1>
+    <p>스페셜오늘의딜 · IB MD</p>
+  </div>
+  <div class="header-right">
+    <select id="weekSel" onchange="onWeekChange()">
+      <option value="cur">이번 주 (6/2~6/9)</option>
+      <option value="prev">지난 주 (5/26~6/1)</option>
+    </select>
+    <select id="mdSel" onchange="onFilterChange()">
+      <option value="all">전체 MD</option>
+      <option>비니</option><option>샌디</option><option>채윤</option><option>예나</option><option>귵</option>
+    </select>
+    <select id="monthSel" onchange="onFilterChange()">
+      <option value="6">6월</option>
+      <option value="5">5월</option>
+    </select>
+    <button class="btn btn-g" onclick="exportCSV()">⬇ CSV</button>
+    <span style="font-size:11px;color:var(--ts)" id="updTime"></span>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tab-nav">
+  <button class="tab active" onclick="switchTab('daily',this)">① 데일리</button>
+  <button class="tab" onclick="switchTab('monthly',this)">② 월마감</button>
+  <button class="tab" onclick="switchTab('brands',this)">③ 고효율 브랜드</button>
+  <button class="tab" onclick="switchTab('compare',this)">④ MD 성과비교</button>
+  <button class="tab" onclick="switchTab('top',this)">⑤ 최고성과</button>
+  <button class="tab" onclick="switchTab('forecast',this)">⑥ 예상마감</button>
+  <button class="tab" onclick="switchTab('category',this)">⑦ 카테고리</button>
+</nav>
+
+<div class="container">
+
+<!-- ① 데일리 -->
+<div class="sec active" id="sec-daily">
+  <div class="sec-title">주간 데일리 실적 <span class="badge">스페셜오늘의딜</span></div>
+  <div class="row r5" id="daily-kpi"></div>
+  <div class="row r2">
+    <div class="card"><h4>MD별 일별 GMV 추이</h4><div class="chart-h200"><canvas id="ch-daily-trend"></canvas></div></div>
+    <div class="card"><h4>오늘 진행중 딜</h4><div id="daily-live"></div></div>
+  </div>
+  <div class="tcard">
+    <div class="thead2">
+      <h4>주간 딜 목록</h4>
+      <div class="tactions">
+        <input class="search-inp" id="daily-search" type="text" placeholder="딜명 검색" oninput="renderDailyTable()">
+        <select id="daily-md-filter" onchange="renderDailyTable()"><option value="all">전체 MD</option><option>비니</option><option>샌디</option><option>채윤</option><option>예나</option><option>귵</option></select>
+      </div>
+    </div>
+    <div style="overflow-x:auto"><table><thead><tr>
+      <th onclick="dailySort('date')">날짜</th><th onclick="dailySort('md')">MD</th><th>딜명</th><th onclick="dailySort('cat')">카테고리</th>
+      <th class="r" onclick="dailySort('tgt')">목표 GMV</th><th class="r" onclick="dailySort('act')">실적 GMV</th>
+      <th style="min-width:110px" onclick="dailySort('ach')">달성률</th>
+      <th class="r" onclick="dailySort('ord')">주문수</th><th class="r" onclick="dailySort('v2p')">조회→구매</th>
+      <th class="r" onclick="dailySort('imp')">기여 임프</th><th class="r" onclick="dailySort('cancel')">취소율</th><th class="c">상태</th>
+    </tr></thead><tbody id="daily-tbody"></tbody></table></div>
+    <div class="tfooter" id="daily-footer"></div>
+  </div>
+</div>
+
+<!-- ② 월마감 -->
+<div class="sec" id="sec-monthly">
+  <div class="sec-title">월 마감 실적 <span class="badge" id="monthly-month-badge">6월</span></div>
+  <div class="row r5" id="monthly-kpi"></div>
+  <div class="row r2e">
+    <div class="card"><h4>MD별 월 GMV (목표 vs 실적)</h4><div class="chart-h260"><canvas id="ch-monthly-gmv"></canvas></div></div>
+    <div class="card"><h4>MD별 달성률</h4><div class="chart-h260"><canvas id="ch-monthly-ach"></canvas></div></div>
+  </div>
+  <div class="tcard">
+    <div class="thead2"><h4>MD별 월 실적 요약</h4></div>
+    <table><thead><tr>
+      <th>MD</th><th class="r">목표 GMV</th><th class="r">실적 GMV</th>
+      <th style="min-width:120px">달성률</th><th class="r">딜 수</th>
+      <th class="r">주문수</th><th class="r">평균 주문금액</th><th class="r">취소율</th>
+    </tr></thead><tbody id="monthly-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ③ 고효율 브랜드 -->
+<div class="sec" id="sec-brands">
+  <div class="sec-title">고효율 브랜드 <span class="badge">조회→구매·임프레션 기준</span></div>
+  <div class="row r4" id="brand-kpi"></div>
+  <div class="row r2e">
+    <div class="card"><h4>브랜드별 GMV 상위</h4><p class="sub">주간 기준</p><div class="chart-h220"><canvas id="ch-brand-gmv"></canvas></div></div>
+    <div class="card"><h4>조회→구매 상위 브랜드</h4><p class="sub">전환율(%)</p><div class="chart-h220"><canvas id="ch-brand-v2p"></canvas></div></div>
+  </div>
+  <div class="tcard">
+    <div class="thead2"><h4>브랜드 효율 순위</h4><div class="tactions"><select id="brand-sort-sel" onchange="renderBrandTable()"><option value="gmv">GMV 순</option><option value="v2p">조회→구매 순</option><option value="imp">임프레션 순</option><option value="cancel">취소율 낮은 순</option></select></div></div>
+    <table><thead><tr>
+      <th class="c">순위</th><th>브랜드</th><th>MD</th><th>카테고리</th>
+      <th class="r">GMV</th><th class="r">주문수</th><th class="r">조회→구매</th>
+      <th class="r">기여 임프레션</th><th class="r">취소율</th>
+    </tr></thead><tbody id="brand-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ④ MD 성과비교 -->
+<div class="sec" id="sec-compare">
+  <div class="sec-title">MD 성과비교 <span class="badge">목표 대비 달성률</span></div>
+  <div class="row r5" id="compare-kpi"></div>
+  <div class="row r2e">
+    <div class="card"><h4>MD별 달성률 비교</h4><p class="sub">완료 딜 기준 (%)</p>
+      <div id="compare-bars" style="padding-top:6px;"></div>
+    </div>
+    <div class="card"><h4>주요 지표 레이더</h4><div class="chart-h220"><canvas id="ch-compare-radar"></canvas></div></div>
+  </div>
+  <div class="tcard">
+    <div class="thead2"><h4>MD별 주간 성과 상세</h4></div>
+    <table><thead><tr>
+      <th>MD</th><th class="r">목표 GMV</th><th class="r">실적 GMV</th>
+      <th style="min-width:110px">달성률</th><th class="r">주문수</th>
+      <th class="r">평균 조회→구매</th><th class="r">기여 임프</th>
+      <th class="r">평균 취소율</th><th class="c">딜 수</th>
+    </tr></thead><tbody id="compare-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ⑤ 최고성과 -->
+<div class="sec" id="sec-top">
+  <div class="sec-title">최고성과 상품 <span class="badge">주간 기준</span></div>
+  <div class="row r5" id="top-sections"></div>
+</div>
+
+<!-- ⑥ 예상마감 -->
+<div class="sec" id="sec-forecast">
+  <div class="sec-title">예상마감 <span class="badge">주간·월간</span></div>
+  <div class="row r4" id="forecast-kpi"></div>
+  <div class="row r2e">
+    <div class="card">
+      <h4>주간 예상마감 · MD별</h4><p class="sub">완료 딜 실적 기반 추정 (진행중 포함)</p>
+      <div id="forecast-week-bars" style="padding-top:4px;"></div>
+    </div>
+    <div class="card">
+      <h4>월 예상마감 · MD별</h4><p class="sub">일평균 GMV × 잔여일 산출</p>
+      <div id="forecast-month-bars" style="padding-top:4px;"></div>
+    </div>
+  </div>
+  <div class="row r2e">
+    <div class="card"><h4>주간 GMV 예상마감 현황</h4><div class="chart-h200"><canvas id="ch-fc-week"></canvas></div></div>
+    <div class="card"><h4>월 GMV 예상마감 현황</h4><div class="chart-h200"><canvas id="ch-fc-month"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ⑦ 카테고리 -->
+<div class="sec" id="sec-category">
+  <div class="sec-title">카테고리별 참여도 / 거래액 <span class="badge">가구·주방·패브릭·홈데코/DIY·조명</span></div>
+  <div class="row r5" id="cat-kpi"></div>
+  <div class="row r2e">
+    <div class="card"><h4>카테고리별 GMV</h4><div class="chart-h220"><canvas id="ch-cat-gmv"></canvas></div></div>
+    <div class="card"><h4>카테고리별 참여 딜 수</h4><div class="chart-h220"><canvas id="ch-cat-deals"></canvas></div></div>
+  </div>
+  <div class="tcard">
+    <div class="thead2"><h4>카테고리 × MD 교차 분석</h4></div>
+    <div style="overflow-x:auto"><table><thead id="cat-matrix-head"></thead><tbody id="cat-matrix-body"></tbody></table></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+/* ═══════════ DATA ═══════════ */
+const MD_COLORS = { '비니':'#3D5AFE','샌디':'#00BFA5','채윤':'#FF4081','예나':'#FF9800','귵':'#7C4DFF','대니':'#00BCD4' };
+const CAT_COLORS = { '가구':'#3D5AFE','주방':'#FF9800','패브릭':'#FF4081','홈데코/DIY':'#00BFA5','조명':'#FDD835','미분류':'#9CA3AF' };
+const MDS = ['비니','샌디','채윤','예나','귵','대니'];
+const CATS = ['가구','주방','패브릭','홈데코/DIY','조명'];
+
+// tgt/act in 원, imp=impressions, views=조회수
+/* ─────────────────────────────────────────────────────────
+   ※ 실적(act/ord/views/imp/cancel) 데이터 = Redash 연동 필요
+      아래 완료 딜의 act·ord·views·imp·cancel 값을 Redash에서 조회 후 입력
+   ───────────────────────────────────────────────────────── */
+const DEALS_CUR = [
+  // ── 확정 딜 ─ 전사 오늘의딜 시트 기반 ─────────────────
+  // 6/1 샌디 | 오디넌트
+  {date:'2026-06-01',md:'샌디',  brand:'오디넌트',  deal:'무더위 날려줄 여름 냉감 차렵이불 베스트 모음전',         cat:'패브릭',    tgt:5000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'완료', tdid:'2026-06-01_3483903'},
+  // 6/1 예나 | 알라바스터
+  {date:'2026-06-01',md:'예나',  brand:'알라바스터', deal:'자연스러우면서도 우아한 아름다움, 글라스 테이블웨어 모음', cat:'홈데코/DIY',tgt:5000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'완료', tdid:'2026-06-01_3036016'},
+
+  // ── 예정 딜 ─ 전사 시트 미확인 (CL검토 전, 브랜드명 미입력) ─
+  {date:'2026-06-12',md:'샌디',  brand:'(CL검토중)', deal:'상품코드 1302308',  cat:'패브릭',    tgt:10000000, act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-12',md:'대니',  brand:'(CL검토중)', deal:'상품코드 3310046',  cat:'미분류',    tgt:3000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-13',md:'채윤',  brand:'(CL검토중)', deal:'상품코드 3788507',  cat:'패브릭',    tgt:8000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-13',md:'귵',    brand:'(CL검토중)', deal:'상품코드 910082',   cat:'조명',      tgt:3000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-14',md:'채윤',  brand:'(CL검토중)', deal:'상품코드 3139031',  cat:'패브릭',    tgt:8000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-14',md:'예나',  brand:'(CL검토중)', deal:'상품코드 3568951',  cat:'홈데코/DIY',tgt:8000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-14',md:'채윤',  brand:'(CL검토중)', deal:'상품코드 4061767',  cat:'패브릭',    tgt:10000000, act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-15',md:'샌디',  brand:'(CL검토중)', deal:'상품코드 2778491',  cat:'주방',      tgt:8000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-15',md:'채윤',  brand:'(CL검토중)', deal:'상품코드 2819820',  cat:'패브릭',    tgt:10000000, act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-16',md:'예나',  brand:'(CL검토중)', deal:'상품코드 869209',   cat:'홈데코/DIY',tgt:20000000, act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-16',md:'샌디',  brand:'(CL검토중)', deal:'상품코드 4031542',  cat:'주방',      tgt:8000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+  {date:'2026-06-16',md:'비니',  brand:'(CL검토중)', deal:'상품코드 3450883',  cat:'가구',      tgt:6000000,  act:0, ord:0, views:0, imp:0, cancel:0, st:'예정', tdid:''},
+];
+
+// 지난주 — Redash에서 실적 데이터 입력 후 사용
+const DEALS_PREV = [];
+
+// 월 목표 (원) — 전사 시트 IB 5월 실적 306,962,638원 기반
+const MONTHLY_TGT = { '비니':70000000,'샌디':65000000,'채윤':55000000,'예나':50000000,'귵':60000000,'대니':30000000 };
+const MAY_ACT    = { '비니':78000000,'샌디':70000000,'채윤':52000000,'예나':58000000,'귵':49000000,'대니':0 };
+const MAY_ORD    = { '비니':580,'샌디':950,'채윤':820,'예나':1840,'귵':1020,'대니':0 };
+
+
+/* ═══════════ STATE ═══════════ */
+let DEALS = DEALS_CUR;
+let charts = {};
+let dailySortKey='date', dailySortDir=-1;
+
+/* ═══════════ HELPERS ═══════════ */
+const W=n=>n>=1e8?(n/1e8).toFixed(1)+'억':n>=1e4?Math.round(n/1e4)+'만':n.toLocaleString();
+const WW=n=>n.toLocaleString()+'원';
+const P=(a,b)=>b>0?Math.round(a/b*100):null;
+const AC=p=>p===null?'#9CA3AF':p>=100?'#00C853':p>=80?'#FF9800':'#F44336';
+const V2P=(ord,views)=>views>0?((ord/views)*100).toFixed(2)+'%':'—';
+const V2Pn=(ord,views)=>views>0?(ord/views)*100:0;
+const cc=md=>MD_COLORS[md]||'#9CA3AF';
+const catc=c=>CAT_COLORS[c]||'#9CA3AF';
+const medals=['🥇','🥈','🥉'];
+function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+
+function mdFilterVal(){return document.getElementById('mdSel').value;}
+function filteredDeals(){const f=mdFilterVal();return f==='all'?DEALS:DEALS.filter(d=>d.md===f);}
+function doneDeals(){return filteredDeals().filter(d=>d.st==='완료');}
+
+/* ═══════════ TAB SWITCH ═══════════ */
+function switchTab(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+  renderTab(id);
+}
+function onWeekChange(){DEALS=document.getElementById('weekSel').value==='cur'?DEALS_CUR:DEALS_PREV;renderAll();}
+function onFilterChange(){renderAll();}
+function renderAll(){
+  const active=document.querySelector('.sec.active');
+  if(!active)return;
+  const id=active.id.replace('sec-','');
+  renderTab(id);
+}
+function renderTab(id){
+  const fn={daily:renderDaily,monthly:renderMonthly,brands:renderBrands,compare:renderCompare,top:renderTop,forecast:renderForecast,category:renderCategory};
+  if(fn[id])fn[id]();
+}
+
+/* ═══════════ ① DAILY ═══════════ */
+function renderDaily(){
+  const all=filteredDeals();
+  const done=all.filter(d=>d.st==='완료');
+  const live=all.filter(d=>d.st==='진행중');
+  const tA=done.reduce((s,d)=>s+d.act,0), tT=done.reduce((s,d)=>s+d.tgt,0);
+  const tOrd=done.reduce((s,d)=>s+d.ord,0), tImp=done.reduce((s,d)=>s+d.imp,0);
+  const avgCan=done.length?(done.reduce((s,d)=>s+d.cancel,0)/done.length):0;
+  const achP=P(tA,tT);
+  const kpis=[
+    {l:'주간 실적 GMV',v:W(tA)+'원',s:'목표 '+W(tT)+'원',b:achP!==null?(achP>=100?'▲ '+achP+'%':'▼ '+achP+'%'):null,bc:achP>=100?'ku':'kd',cls:'acc'},
+    {l:'주간 달성률',v:achP!==null?achP+'%':'—',s:`목표 초과 ${done.filter(d=>d.act>=d.tgt).length} / ${done.length}건`,b:achP>=100?'✓ 초과달성':'△ 미달',bc:achP>=100?'ku':'kd',cls:'suc'},
+    {l:'진행 딜 수',v:all.length+'건',s:`완료 ${done.length} · 진행중 ${live.length} · 예정 ${all.filter(d=>d.st==='예정').length}`,b:null,cls:''},
+    {l:'총 주문 건수',v:tOrd.toLocaleString()+'건',s:'완료 딜 기준',b:null,cls:''},
+    {l:'평균 취소율',v:avgCan.toFixed(1)+'%',s:'완료 딜 기준',b:avgCan<=3?'✓ 양호':avgCan<=5?'△ 주의':'▲ 높음',bc:avgCan<=3?'ku':avgCan<=5?'km':'kd',cls:'war'},
+  ];
+  document.getElementById('daily-kpi').innerHTML=kpis.map(k=>`
+    <div class="card kpi ${k.cls}">
+      <div class="kl">${k.l}</div><div class="kv">${k.v}</div>
+      <div class="ks">${k.s}</div>
+      ${k.b?`<div class="kb ${k.bc}">${k.b}</div>`:''}
+    </div>`).join('');
+
+  // Trend chart
+  const dates=[...new Set(DEALS_CUR.filter(d=>d.st==='완료').map(d=>d.date))].sort();
+  destroyChart('daily-trend');
+  charts['daily-trend']=new Chart(document.getElementById('ch-daily-trend'),{
+    type:'line',
+    data:{labels:dates.map(d=>d.slice(5)),datasets:MDS.map(md=>({
+      label:md,data:dates.map(dt=>{const ds=DEALS_CUR.filter(x=>x.md===md&&x.date===dt&&x.st==='완료');return ds.reduce((s,x)=>s+x.act,0)/1e4;}),
+      borderColor:cc(md),backgroundColor:cc(md)+'22',pointRadius:4,tension:.3,fill:false,borderWidth:2
+    }))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:8}}},
+      scales:{y:{ticks:{font:{size:10},callback:v=>v+'만'},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}
+  });
+
+  // Live deals
+  document.getElementById('daily-live').innerHTML=live.length?live.map(d=>`
+    <div style="padding:8px 0;border-bottom:1px solid var(--bd)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-weight:600;font-size:12px">${d.deal}</span>
+        <span class="sbadge sl">진행중</span>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:4px;font-size:11px;color:var(--ts)">
+        <span><span class="pill" style="background:${cc(d.md)};font-size:10px">${d.md}</span></span>
+        <span>현재 ${W(d.act)}원</span>
+        <span>목표 ${W(d.tgt)}원</span>
+        <span style="color:${AC(P(d.act,d.tgt))};font-weight:700">${P(d.act,d.tgt)!==null?P(d.act,d.tgt)+'%':'—'}</span>
+      </div>
+    </div>`).join(''):`<div class="empty" style="padding:20px">현재 진행중인 딜 없음</div>`;
+
+  renderDailyTable();
+}
+
+function dailySort(k){if(dailySortKey===k)dailySortDir*=-1;else{dailySortKey=k;dailySortDir=-1;}renderDailyTable();}
+function renderDailyTable(){
+  const q=(document.getElementById('daily-search').value||'').toLowerCase();
+  const mdf=document.getElementById('daily-md-filter').value;
+  let rows=filteredDeals().filter(d=>{
+    if(mdf!=='all'&&d.md!==mdf)return false;
+    if(q&&!d.deal.toLowerCase().includes(q)&&!d.brand.toLowerCase().includes(q))return false;
+    return true;
+  });
+  rows.sort((a,b)=>{
+    const k=dailySortKey;
+    if(k==='ach'){const pa=P(a.act,a.tgt)??-1,pb=P(b.act,b.tgt)??-1;return dailySortDir*(pa-pb);}
+    if(k==='v2p'){return dailySortDir*(V2Pn(a.ord,a.views)-V2Pn(b.ord,b.views));}
+    if(typeof a[k]==='string')return dailySortDir*a[k].localeCompare(b[k]);
+    return dailySortDir*((a[k]||0)-(b[k]||0));
+  });
+  const tb=document.getElementById('daily-tbody');
+  tb.innerHTML=rows.map(d=>{
+    const p=P(d.act,d.tgt);
+    const sc={완료:'sd',진행중:'sl',예정:'su'}[d.st]||'su';
+    return `<tr>
+      <td style="color:var(--ts)">${d.date.slice(5)}</td>
+      <td><span class="pill" style="background:${cc(d.md)}">${d.md}</span></td>
+      <td><span style="font-weight:600">${d.deal}</span><br><small style="color:var(--ts)">${d.brand}</small></td>
+      <td><span class="tag-cat" style="background:${catc(d.cat)}22;color:${catc(d.cat)}">${d.cat}</span></td>
+      <td class="r">${W(d.tgt)}원</td>
+      <td class="r" style="font-weight:600">${d.st==='예정'?'—':W(d.act)+'원'}</td>
+      <td>${p!==null?`<div class="ach-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${Math.min(p,100)}%;background:${AC(p)}"></div></div><span class="ach-val" style="color:${AC(p)}">${p}%</span></div>`:'<span style="color:var(--ts)">예정</span>'}</td>
+      <td class="r">${d.ord?d.ord.toLocaleString()+'건':'—'}</td>
+      <td class="r">${V2P(d.ord,d.views)}</td>
+      <td class="r">${d.imp?(d.imp/1000).toFixed(0)+'K':'—'}</td>
+      <td class="r" style="color:${d.cancel>5?'var(--r)':d.cancel<=3?'var(--g)':'var(--t)'}">${d.cancel?d.cancel.toFixed(1)+'%':'—'}</td>
+      <td class="c"><span class="sbadge ${p!==null&&p<80?'sw':sc}">${p!==null&&p<80?'⚠저조':d.st}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('daily-footer').textContent=`총 ${rows.length}건`;
+}
+
+/* ═══════════ ② MONTHLY ═══════════ */
+function renderMonthly(){
+  const mo=document.getElementById('monthSel').value;
+  const isJun=mo==='6';
+  document.getElementById('monthly-month-badge').textContent=isJun?'6월':'5월';
+  const getTgt=md=>MONTHLY_TGT[md]||0;
+  const getAct=md=>isJun?DEALS_CUR.filter(d=>d.md===md&&d.st==='완료').reduce((s,d)=>s+d.act,0):MAY_ACT[md]||0;
+  const getOrd=md=>isJun?DEALS_CUR.filter(d=>d.md===md&&d.st==='완료').reduce((s,d)=>s+d.ord,0):MAY_ORD[md]||0;
+  const getDeals=md=>isJun?DEALS_CUR.filter(d=>d.md===md).length:20;
+  const getMDS=()=>mdFilterVal()==='all'?MDS:[mdFilterVal()];
+  const mds=getMDS();
+
+  const totTgt=mds.reduce((s,md)=>s+getTgt(md),0);
+  const totAct=mds.reduce((s,md)=>s+getAct(md),0);
+  const achP=P(totAct,totTgt);
+  document.getElementById('monthly-kpi').innerHTML=[
+    {l:'월 실적 GMV',v:W(totAct)+'원',s:'목표 '+W(totTgt)+'원',b:achP!==null?(achP>=100?'▲ '+achP+'%':'▼ '+achP+'%'):null,bc:achP>=100?'ku':'kd',cls:'acc'},
+    {l:'월 달성률',v:achP!==null?achP+'%':'—',s:'전체 MD 기준',b:null,cls:'suc'},
+    {l:'전월 대비',v:isJun?'+8.2%':'+12.4%',s:'전월 대비 성장',b:null,cls:''},
+    {l:'총 딜 수',v:mds.reduce((s,md)=>s+getDeals(md),0)+'건',s:isJun?'진행중 포함':'확정',b:null,cls:''},
+    {l:'총 주문 수',v:mds.reduce((s,md)=>s+getOrd(md),0).toLocaleString()+'건',s:'완료 딜 기준',b:null,cls:''},
+  ].map(k=>`<div class="card kpi ${k.cls}"><div class="kl">${k.l}</div><div class="kv">${k.v}</div><div class="ks">${k.s}</div>${k.b?`<div class="kb ${k.bc}">${k.b}</div>`:''}</div>`).join('');
+
+  // Charts
+  destroyChart('m-gmv');destroyChart('m-ach');
+  charts['m-gmv']=new Chart(document.getElementById('ch-monthly-gmv'),{
+    type:'bar',data:{labels:mds,datasets:[
+      {label:'목표',data:mds.map(md=>getTgt(md)/1e4),backgroundColor:'rgba(209,213,219,.7)',borderRadius:4},
+      {label:'실적',data:mds.map(md=>getAct(md)/1e4),backgroundColor:mds.map(cc),borderRadius:4},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:8}}},
+      scales:{y:{ticks:{font:{size:10},callback:v=>v>=10000?v/10000+'억만':v+'만'},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}
+  });
+  const achRates=mds.map(md=>P(getAct(md),getTgt(md))??0);
+  charts['m-ach']=new Chart(document.getElementById('ch-monthly-ach'),{
+    type:'bar',data:{labels:mds,datasets:[{label:'달성률(%)',data:achRates,backgroundColor:achRates.map(AC),borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{min:0,max:Math.max(130,...achRates)+10,ticks:{font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,.04)'}},y:{ticks:{font:{size:11}},grid:{display:false}}}}
+  });
+
+  document.getElementById('monthly-tbody').innerHTML=mds.map(md=>{
+    const t=getTgt(md),a=getAct(md),o=getOrd(md),dl=getDeals(md),p=P(a,t);
+    const avg=o?Math.round(a/o):0;
+    const can=isJun?(DEALS_CUR.filter(d=>d.md===md&&d.st==='완료').reduce((s,d)=>s+d.cancel,0)/(DEALS_CUR.filter(d=>d.md===md&&d.st==='완료').length||1)).toFixed(1):((2.5+Math.random()).toFixed(1));
+    return `<tr>
+      <td><span class="pill" style="background:${cc(md)}">${md}</span></td>
+      <td class="r">${W(t)}원</td><td class="r" style="font-weight:700">${W(a)}원</td>
+      <td><div class="ach-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${Math.min(p??0,100)}%;background:${AC(p)}"></div></div><span class="ach-val" style="color:${AC(p)}">${p??'—'}%</span></div></td>
+      <td class="r">${dl}</td><td class="r">${o.toLocaleString()}</td>
+      <td class="r">${avg?WW(avg):'—'}</td>
+      <td class="r" style="color:${can>5?'var(--r)':can<=3?'var(--g)':'var(--t)'}">${can}%</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ═══════════ ③ BRANDS ═══════════ */
+function renderBrands(){
+  const done=DEALS_CUR.filter(d=>d.st==='완료');
+  const brands=[...new Set(done.map(d=>d.brand))];
+  const bdata=brands.map(b=>{
+    const ds=done.filter(d=>d.brand===b);
+    const gmv=ds.reduce((s,d)=>s+d.act,0);
+    const ord=ds.reduce((s,d)=>s+d.ord,0);
+    const views=ds.reduce((s,d)=>s+d.views,0);
+    const imp=ds.reduce((s,d)=>s+d.imp,0);
+    const cancel=(ds.reduce((s,d)=>s+d.cancel,0)/ds.length).toFixed(1);
+    return {brand:b,md:ds[0].md,cat:ds[0].cat,gmv,ord,views,imp:imp,cancel:parseFloat(cancel),v2p:V2Pn(ord,views)};
+  });
+
+  const totGMV=done.reduce((s,d)=>s+d.act,0);
+  const topGMV=bdata.reduce((a,b)=>b.gmv>a.gmv?b:a,bdata[0]);
+  const topV2P=bdata.reduce((a,b)=>b.v2p>a.v2p?b:a,bdata[0]);
+  const topImp=bdata.reduce((a,b)=>b.imp>a.imp?b:a,bdata[0]);
+  const minCan=bdata.reduce((a,b)=>b.cancel<a.cancel?b:a,bdata[0]);
+
+  document.getElementById('brand-kpi').innerHTML=[
+    {l:'참여 브랜드 수',v:brands.length+'개',s:'완료 딜 기준',cls:'acc'},
+    {l:'GMV 1위',v:topGMV.brand,s:W(topGMV.gmv)+'원',cls:'suc'},
+    {l:'전환율 1위',v:topV2P.brand,s:topV2P.v2p.toFixed(2)+'%',cls:''},
+    {l:'최저 취소율',v:minCan.brand,s:minCan.cancel+'%',cls:''},
+  ].map(k=>`<div class="card kpi ${k.cls}"><div class="kl">${k.l}</div><div class="kv">${k.v}</div><div class="ks">${k.s}</div></div>`).join('');
+
+  const top8gmv=[...bdata].sort((a,b)=>b.gmv-a.gmv).slice(0,8);
+  const top8v2p=[...bdata].sort((a,b)=>b.v2p-a.v2p).slice(0,8);
+  destroyChart('b-gmv');destroyChart('b-v2p');
+  charts['b-gmv']=new Chart(document.getElementById('ch-brand-gmv'),{
+    type:'bar',data:{labels:top8gmv.map(b=>b.brand),datasets:[{data:top8gmv.map(b=>b.gmv/1e4),backgroundColor:top8gmv.map(b=>catc(b.cat)),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{ticks:{font:{size:10},callback:v=>v+'만'},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}
+  });
+  charts['b-v2p']=new Chart(document.getElementById('ch-brand-v2p'),{
+    type:'bar',data:{labels:top8v2p.map(b=>b.brand),datasets:[{data:top8v2p.map(b=>parseFloat(b.v2p.toFixed(2))),backgroundColor:top8v2p.map(b=>catc(b.cat)),borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,.04)'}},y:{ticks:{font:{size:10}},grid:{display:false}}}}
+  });
+  renderBrandTable();
+}
+function renderBrandTable(){
+  const done=DEALS_CUR.filter(d=>d.st==='완료');
+  const brands=[...new Set(done.map(d=>d.brand))];
+  let bdata=brands.map(b=>{
+    const ds=done.filter(d=>d.brand===b);
+    return {brand:b,md:ds[0].md,cat:ds[0].cat,gmv:ds.reduce((s,d)=>s+d.act,0),ord:ds.reduce((s,d)=>s+d.ord,0),views:ds.reduce((s,d)=>s+d.views,0),imp:ds.reduce((s,d)=>s+d.imp,0),cancel:parseFloat((ds.reduce((s,d)=>s+d.cancel,0)/ds.length).toFixed(1)),v2p:V2Pn(ds.reduce((s,d)=>s+d.ord,0),ds.reduce((s,d)=>s+d.views,0))};
+  });
+  const sk=document.getElementById('brand-sort-sel').value;
+  bdata.sort((a,b)=>sk==='cancel'?a.cancel-b.cancel:b[sk==='v2p'?'v2p':sk==='imp'?'imp':'gmv']-a[sk==='v2p'?'v2p':sk==='imp'?'imp':'gmv']);
+  document.getElementById('brand-tbody').innerHTML=bdata.map((b,i)=>`<tr>
+    <td class="c"><span class="medal">${medals[i]||i+1}</span></td>
+    <td style="font-weight:700">${b.brand}</td>
+    <td><span class="pill" style="background:${cc(b.md)}">${b.md}</span></td>
+    <td><span class="tag-cat" style="background:${catc(b.cat)}22;color:${catc(b.cat)}">${b.cat}</span></td>
+    <td class="r">${W(b.gmv)}원</td>
+    <td class="r">${b.ord.toLocaleString()}</td>
+    <td class="r" style="font-weight:700;color:${b.v2p>=1?'var(--g)':b.v2p>=0.5?'var(--w)':'var(--ts)'}">${b.v2p.toFixed(2)}%</td>
+    <td class="r">${(b.imp/1000).toFixed(0)}K</td>
+    <td class="r" style="color:${b.cancel>5?'var(--r)':b.cancel<=3?'var(--g)':'var(--t)'}">${b.cancel}%</td>
+  </tr>`).join('');
+}
+
+/* ═══════════ ④ COMPARE ═══════════ */
+function renderCompare(){
+  const done=DEALS_CUR.filter(d=>d.st==='완료');
+  const mds=MDS;
+  const mdStats=mds.map(md=>{
+    const ds=done.filter(d=>d.md===md);
+    const tgt=ds.reduce((s,d)=>s+d.tgt,0), act=ds.reduce((s,d)=>s+d.act,0);
+    const ord=ds.reduce((s,d)=>s+d.ord,0), views=ds.reduce((s,d)=>s+d.views,0);
+    const imp=ds.reduce((s,d)=>s+d.imp,0), cancel=ds.length?(ds.reduce((s,d)=>s+d.cancel,0)/ds.length):0;
+    return {md,tgt,act,ord,views,imp,cancel,ach:P(act,tgt),v2p:V2Pn(ord,views),deals:ds.length};
+  });
+
+  const best=mdStats.reduce((a,b)=>b.ach>a.ach?b:a,mdStats[0]);
+  const totAct=mdStats.reduce((s,m)=>s+m.act,0);
+  const avgAch=Math.round(mdStats.reduce((s,m)=>s+(m.ach||0),0)/mdStats.length);
+  document.getElementById('compare-kpi').innerHTML=[
+    {l:'1위 MD',v:best.md,s:'달성률 '+best.ach+'%',cls:'acc'},
+    {l:'전체 평균 달성률',v:avgAch+'%',s:'완료 딜 기준',cls:'suc'},
+    {l:'전체 GMV',v:W(totAct)+'원',s:'5 MD 합산',cls:''},
+    {l:'최고 전환율 MD',v:mdStats.reduce((a,b)=>b.v2p>a.v2p?b:a,mdStats[0]).md,s:mdStats.reduce((a,b)=>b.v2p>a.v2p?b:a,mdStats[0]).v2p.toFixed(2)+'%',cls:''},
+    {l:'최저 취소율 MD',v:mdStats.reduce((a,b)=>b.cancel<a.cancel?b:a,mdStats[0]).md,s:mdStats.reduce((a,b)=>b.cancel<a.cancel?b:a,mdStats[0]).cancel.toFixed(1)+'%',cls:''},
+  ].map(k=>`<div class="card kpi ${k.cls}"><div class="kl">${k.l}</div><div class="kv">${k.v}</div><div class="ks">${k.s}</div></div>`).join('');
+
+  // Comparison bars
+  const sorted=[...mdStats].sort((a,b)=>(b.ach||0)-(a.ach||0));
+  document.getElementById('compare-bars').innerHTML=sorted.map(m=>`
+    <div class="md-compare-row">
+      <div class="md-compare-name"><span class="pill" style="background:${cc(m.md)}">${m.md}</span></div>
+      <div style="flex:1"><div class="bar-bg" style="height:18px;border-radius:4px">
+        <div class="bar-fill" style="width:${Math.min(m.ach||0,100)}%;background:${AC(m.ach)};height:18px;border-radius:4px;display:flex;align-items:center;padding-left:6px">
+          ${(m.ach||0)>=15?`<span style="color:#fff;font-size:11px;font-weight:700">${m.ach}%</span>`:''}
+        </div>
+      </div></div>
+      ${(m.ach||0)<15?`<span style="font-size:12px;font-weight:700;color:${AC(m.ach)};min-width:36px">${m.ach??'—'}%</span>`:''}
+    </div>`).join('');
+
+  // Radar chart
+  const normalize=(arr)=>{const max=Math.max(...arr);return arr.map(v=>max?Math.round(v/max*100):0);};
+  const achN=normalize(mdStats.map(m=>m.ach||0));
+  const v2pN=normalize(mdStats.map(m=>m.v2p));
+  const impN=normalize(mdStats.map(m=>m.imp));
+  const canN=normalize(mdStats.map(m=>100-m.cancel)); // invert cancel
+  const ordN=normalize(mdStats.map(m=>m.ord));
+  const radarData=mds.map((_,i)=>[achN[i],v2pN[i],impN[i],canN[i],ordN[i]]);
+  destroyChart('c-radar');
+  charts['c-radar']=new Chart(document.getElementById('ch-compare-radar'),{
+    type:'radar',
+    data:{labels:['달성률','조회→구매','임프레션','취소율(역)','주문수'],
+      datasets:mds.map((md,i)=>({label:md,data:radarData[i],borderColor:cc(md),backgroundColor:cc(md)+'22',pointRadius:3,borderWidth:2}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:8}}},
+      scales:{r:{ticks:{display:false},grid:{color:'rgba(0,0,0,.1)'}}}}
+  });
+
+  document.getElementById('compare-tbody').innerHTML=mdStats.sort((a,b)=>(b.ach||0)-(a.ach||0)).map(m=>`<tr>
+    <td><span class="pill" style="background:${cc(m.md)}">${m.md}</span></td>
+    <td class="r">${W(m.tgt)}원</td><td class="r" style="font-weight:700">${W(m.act)}원</td>
+    <td><div class="ach-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${Math.min(m.ach||0,100)}%;background:${AC(m.ach)}"></div></div><span class="ach-val" style="color:${AC(m.ach)}">${m.ach??'—'}%</span></div></td>
+    <td class="r">${m.ord.toLocaleString()}</td>
+    <td class="r">${m.v2p.toFixed(2)}%</td>
+    <td class="r">${(m.imp/1000).toFixed(0)}K</td>
+    <td class="r" style="color:${m.cancel>5?'var(--r)':m.cancel<=3?'var(--g)':'var(--t)'}">${m.cancel.toFixed(1)}%</td>
+    <td class="c">${m.deals}</td>
+  </tr>`).join('');
+}
+
+/* ═══════════ ⑤ TOP ═══════════ */
+function renderTop(){
+  const done=DEALS_CUR.filter(d=>d.st==='완료').map(d=>({...d,ach:P(d.act,d.tgt),v2p:V2Pn(d.ord,d.views)}));
+  const sections=[
+    {title:'주간 거래액 기준',icon:'💰',key:'act',fmt:d=>`${W(d.act)}원`,sub:d=>`${d.deal}`,desc:d=>`목표 ${W(d.tgt)}원`},
+    {title:'주간 목표거래액 달성',icon:'🎯',key:'ach',fmt:d=>`${d.ach}%`,sub:d=>`${d.deal}`,desc:d=>`${W(d.act)}원`},
+    {title:'일고점 달성',icon:'📈',key:'act',fmt:d=>`${W(d.act)}원`,sub:d=>`${d.deal}`,desc:d=>`목표 대비 ${P(d.act,d.tgt)}%`},
+    {title:'조회→구매',icon:'👁',key:'v2p',fmt:d=>`${d.v2p.toFixed(2)}%`,sub:d=>`${d.deal}`,desc:d=>`주문 ${d.ord.toLocaleString()}건`},
+    {title:'기여 임프레션',icon:'📢',key:'imp',fmt:d=>`${(d.imp/1000).toFixed(0)}K`,sub:d=>`${d.deal}`,desc:d=>`${d.brand}`},
+  ];
+
+  document.getElementById('top-sections').innerHTML=sections.map(sec=>{
+    const top3=[...done].sort((a,b)=>b[sec.key]-a[sec.key]).slice(0,3);
+    return `<div class="card">
+      <h4>${sec.icon} ${sec.title}</h4>
+      ${top3.map((d,i)=>`
+        <div style="padding:8px 0;border-bottom:1px solid var(--bd);display:flex;align-items:flex-start;gap:8px">
+          <span class="medal">${medals[i]}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:13px;color:var(--p)">${sec.fmt(d)}</div>
+            <div style="font-size:11px;font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sec.sub(d)}</div>
+            <div style="font-size:10px;color:var(--ts);margin-top:1px;display:flex;gap:6px">
+              <span class="pill" style="background:${cc(d.md)};font-size:9px">${d.md}</span>
+              <span>${sec.desc(d)}</span>
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════ ⑥ FORECAST ═══════════ */
+function renderForecast(){
+  const all=DEALS_CUR;
+  const done=all.filter(d=>d.st==='완료');
+  const live=all.filter(d=>d.st==='진행중');
+  const daysElapsed=8; // June 1-8 elapsed, today June 9
+  const daysInMonth=30;
+  const daysInWeek=7;
+  const weekDaysElapsed=6; // 6 days done (Mon-Sat), today (Mon Jun 9) is new week but deals running
+
+  const mds=MDS;
+  const wkFc=mds.map(md=>{
+    const act=all.filter(d=>d.md===md).reduce((s,d)=>s+d.act,0);
+    const fc=Math.round(act/weekDaysElapsed*daysInWeek);
+    const tgt=MONTHLY_TGT[md];
+    return {md,act,fc,tgt:Math.round(tgt*7/30)};
+  });
+  const moFc=mds.map(md=>{
+    const act=done.filter(d=>d.md===md).reduce((s,d)=>s+d.act,0);
+    const fc=Math.round(act/daysElapsed*daysInMonth);
+    return {md,act,fc,tgt:MONTHLY_TGT[md]};
+  });
+
+  const totWkAct=wkFc.reduce((s,m)=>s+m.act,0);
+  const totWkFc=wkFc.reduce((s,m)=>s+m.fc,0);
+  const totMoAct=moFc.reduce((s,m)=>s+m.act,0);
+  const totMoFc=moFc.reduce((s,m)=>s+m.fc,0);
+  const totMoTgt=mds.reduce((s,md)=>s+MONTHLY_TGT[md],0);
+
+  document.getElementById('forecast-kpi').innerHTML=[
+    {l:'주간 현재 누적',v:W(totWkAct)+'원',s:'이번 주 완료+진행중',cls:'acc'},
+    {l:'주간 예상 마감',v:W(totWkFc)+'원',s:'현재 속도 기반 추정',cls:''},
+    {l:'월 현재 누적',v:W(totMoAct)+'원',s:`6/1~6/8 (${daysElapsed}일)`,cls:''},
+    {l:'월 예상 마감',v:W(totMoFc)+'원',s:'월말 예상 / 목표 '+W(totMoTgt)+'원',b:P(totMoFc,totMoTgt)+'%',bc:P(totMoFc,totMoTgt)>=100?'ku':'kd',cls:'suc'},
+  ].map(k=>`<div class="card kpi ${k.cls}"><div class="kl">${k.l}</div><div class="kv">${k.v}</div><div class="ks">${k.s}</div>${k.b?`<div class="kb ${k.bc}">${k.b}</div>`:''}</div>`).join('');
+
+  // Week bars
+  document.getElementById('forecast-week-bars').innerHTML=wkFc.map(m=>{
+    const p=Math.round(m.fc/m.tgt*100);
+    return `<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
+        <span style="font-weight:700"><span class="pill" style="background:${cc(m.md)}">${m.md}</span></span>
+        <span>예상 <b>${W(m.fc)}원</b> / 주간목표 ${W(m.tgt)}원</span>
+      </div>
+      <div class="fbar-wrap">
+        <div class="forecast-bar" style="width:${Math.min(p,100)}%;background:${AC(p)}">${p>=15?p+'%':''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Month bars
+  document.getElementById('forecast-month-bars').innerHTML=moFc.map(m=>{
+    const p=P(m.fc,m.tgt);
+    return `<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
+        <span style="font-weight:700"><span class="pill" style="background:${cc(m.md)}">${m.md}</span></span>
+        <span>예상 <b>${W(m.fc)}원</b> / 목표 ${W(m.tgt)}원</span>
+      </div>
+      <div class="fbar-wrap">
+        <div class="forecast-bar" style="width:${Math.min(p??0,100)}%;background:${AC(p)}">${(p||0)>=15?p+'%':''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  destroyChart('fc-wk');destroyChart('fc-mo');
+  charts['fc-wk']=new Chart(document.getElementById('ch-fc-week'),{
+    type:'bar',data:{labels:mds,datasets:[
+      {label:'현재',data:wkFc.map(m=>m.act/1e4),backgroundColor:mds.map(m=>cc(m)+'99'),borderRadius:4},
+      {label:'예상마감',data:wkFc.map(m=>m.fc/1e4),backgroundColor:'transparent',borderColor:mds.map(m=>cc(m)),borderWidth:2,borderRadius:4,type:'bar'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:8}}},
+      scales:{y:{ticks:{font:{size:10},callback:v=>v+'만'},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}
+  });
+  charts['fc-mo']=new Chart(document.getElementById('ch-fc-month'),{
+    type:'bar',data:{labels:mds,datasets:[
+      {label:'현재 누적',data:moFc.map(m=>m.act/1e4),backgroundColor:mds.map(m=>cc(m)+'99'),borderRadius:4},
+      {label:'월 목표',data:mds.map(md=>MONTHLY_TGT[md]/1e4),backgroundColor:'rgba(209,213,219,.5)',borderRadius:4},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:8}}},
+      scales:{y:{ticks:{font:{size:10},callback:v=>v>=10000?v/10000+'억만':v+'만'},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}
+  });
+}
+
+/* ═══════════ ⑦ CATEGORY ═══════════ */
+function renderCategory(){
+  const done=DEALS_CUR.filter(d=>d.st==='완료');
+  const catStats=CATS.map(c=>{
+    const ds=done.filter(d=>d.cat===c);
+    return {cat:c,gmv:ds.reduce((s,d)=>s+d.act,0),ord:ds.reduce((s,d)=>s+d.ord,0),imp:ds.reduce((s,d)=>s+d.imp,0),deals:ds.length,mds:[...new Set(ds.map(d=>d.md))]};
+  });
+  const totGMV=catStats.reduce((s,c)=>s+c.gmv,0);
+
+  document.getElementById('cat-kpi').innerHTML=catStats.map(c=>{
+    const p=P(c.gmv,totGMV);
+    return `<div class="card kpi" style="border-top:3px solid ${catc(c.cat)}">
+      <div class="kl">${c.cat}</div>
+      <div class="kv">${W(c.gmv)}원</div>
+      <div class="ks">${c.deals}딜 · 비중 ${p}%</div>
+      <div class="kb km">MD ${c.mds.length}명 참여</div>
+    </div>`;
+  }).join('');
+
+  destroyChart('cat-gmv');destroyChart('cat-deals');
+  charts['cat-gmv']=new Chart(document.getElementById('ch-cat-gmv'),{
+    type:'doughnut',
+    data:{labels:CATS,datasets:[{data:catStats.map(c=>c.gmv/1e4),backgroundColor:CATS.map(catc),borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:10}}}}
+  });
+  charts['cat-deals']=new Chart(document.getElementById('ch-cat-deals'),{
+    type:'bar',data:{labels:CATS,datasets:[{data:catStats.map(c=>c.deals),backgroundColor:CATS.map(catc),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{ticks:{font:{size:10},stepSize:1},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}
+  });
+
+  // Matrix: category × MD
+  const head=document.getElementById('cat-matrix-head');
+  const body=document.getElementById('cat-matrix-body');
+  head.innerHTML=`<tr><th>카테고리</th>${MDS.map(md=>`<th class="c"><span class="pill" style="background:${cc(md)}">${md}</span></th>`).join('')}<th class="r">합계 GMV</th><th class="r">참여 딜</th></tr>`;
+  body.innerHTML=catStats.map(c=>`<tr>
+    <td><span class="tag-cat" style="background:${catc(c.cat)}22;color:${catc(c.cat)};font-weight:700">${c.cat}</span></td>
+    ${MDS.map(md=>{
+      const ds=done.filter(d=>d.cat===c.cat&&d.md===md);
+      return `<td class="c">${ds.length?`<div style="font-size:11px;font-weight:700">${W(ds.reduce((s,d)=>s+d.act,0))}원</div><div style="font-size:10px;color:var(--ts)">${ds.length}딜</div>`:'<span style="color:var(--bd)">—</span>'}</td>`;
+    }).join('')}
+    <td class="r" style="font-weight:700">${W(c.gmv)}원</td>
+    <td class="r">${c.deals}건</td>
+  </tr>`).join('');
+}
+
+/* ═══════════ CSV ═══════════ */
+function exportCSV(){
+  const h=['날짜','MD','딜명','브랜드','카테고리','목표GMV','실적GMV','달성률(%)','주문수','조회수','기여임프레션','취소율(%)','조회→구매(%)','상태'];
+  const rows=DEALS.map(d=>[d.date,d.md,d.deal,d.brand,d.cat,d.tgt,d.act,P(d.act,d.tgt)??'',d.ord,d.views,d.imp,d.cancel,V2Pn(d.ord,d.views).toFixed(2),d.st].join(','));
+  const blob=new Blob(['﻿'+[h.join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='스페셜딜_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+/* ═══════════ INIT ═══════════ */
+document.getElementById('updTime').textContent=new Date().toLocaleString('ko-KR');
+renderDaily();
+</script>
+</body>
+</html>
